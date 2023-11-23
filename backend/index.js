@@ -10,9 +10,7 @@ app.use(cors());
 
 const port = process.env.PORT || 4000;
 
-app.listen(port, () => console.log(`Testdata APP listening on port ${port}`));
-
-// establish database connection
+app.listen(port, () => console.log(`Test APP listening on port ${port}`));
 
 const dbconfig = {
   host: process.env.MYSQL_HOST,
