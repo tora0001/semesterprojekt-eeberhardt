@@ -25,15 +25,14 @@ if (process.env.MYSQL_CERT) {
 
 const connection = mysql.createConnection(dbconfig);
 
-app.get("/employee", (req, res) => {
-  connection.query(`SELECT * FROM employee`, function (err, results, fields) {
-    console.log("ERR:");
-    console.log(err);
-    console.log("RESULTS:");
-    console.log(results);
-    console.log("FIELDS:");
-    console.log(fields);
+app.get("/employees", (req, res) => {
+  connection.query(`SELECT * FROM employee`, function (err, results) {
+    res.json(results);
+  });
+});
 
+app.get("/vacations", (req, res) => {
+  connection.query(`SELECT * FROM ferier`, function (err, results) {
     res.json(results);
   });
 });
