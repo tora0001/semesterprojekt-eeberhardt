@@ -25,7 +25,7 @@ if (process.env.MYSQL_CERT) {
 
 const connection = mysql.createConnection(dbconfig);
 
-//employee routes
+//get all imployees
 
 app.get("/employee", (req, res) => {
   const query = "SELECT * FROM employee";
@@ -38,6 +38,8 @@ app.get("/employee", (req, res) => {
     }
   });
 });
+
+//get employee by id
 
 app.get("/employee/:employee_id", (req, res) => {
   const id = req.params.employee_id;
@@ -53,10 +55,29 @@ app.get("/employee/:employee_id", (req, res) => {
   });
 });
 
+//create new employee
+
 app.post("/employee", (req, res) => {
   const employee = req.body;
   const query = "INSERT INTO employee(name, rolle_id, ferieDage, status_id) values(?,?,?,?);";
   const values = [employee.name, employee.rolle_id, employee.ferieDage, employee.status_id];
+
+  connection.query(query, values, (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+//update employee by id
+
+app.put("/employee/:employee_id", (req, res) => {
+  const id = req.params.employee_id;
+  const employee = req.body;
+  const query = "UPDATE employee SET name=?, rolle_id=?, ferieDage=?, status_id=? WHERE employee_id=?;";
+  const values = [employee.name, employee.rolle_id, employee.ferieDage, employee.status_id, id];
 
   connection.query(query, values, (error, results) => {
     if (error) {
