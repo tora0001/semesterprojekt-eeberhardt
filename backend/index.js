@@ -25,14 +25,52 @@ if (process.env.MYSQL_CERT) {
 
 const connection = mysql.createConnection(dbconfig);
 
-app.get("/employees", (req, res) => {
-  connection.query(`SELECT * FROM employee`, function (err, results) {
-    res.json(results);
+//employee routes
+
+app.get("/employee", (req, res) => {
+  const query = "SELECT * FROM employee";
+
+  connection.query(query, (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.json(results);
+    }
   });
 });
 
-app.get("/vacations", (req, res) => {
-  connection.query(`SELECT * FROM ferier`, function (err, results) {
+app.get("/employee/:employee_id", (req, res) => {
+  const id = req.params.employee_id;
+  const query = "SELECT * FROM employee WHERE employee_id=?;";
+  const values = [id];
+
+  connection.query(query, values, (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+app.post("/employee", (req, res) => {
+  const employee = req.body;
+  const query = "INSERT INTO employee(name, rolle_id, ferieDage, status_id) values(?,?,?,?);";
+  const values = [employee.name, employee.rolle_id, employee.ferieDage, employee.status_id];
+
+  connection.query(query, values, (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+app.get("/vacation", (req, res) => {
+  const query = "SELECT * FROM vacation";
+
+  connection.query(query, function (err, results) {
     res.json(results);
   });
 });
