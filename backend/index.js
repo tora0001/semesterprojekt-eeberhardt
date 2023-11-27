@@ -88,10 +88,32 @@ app.put("/employee/:employee_id", (req, res) => {
   });
 });
 
-app.get("/vacation", (req, res) => {
-  const query = "SELECT * FROM vacation";
+//delete employee by id
 
-  connection.query(query, function (err, results) {
-    res.json(results);
+app.delete("/employee/:employee_id", (req, res) => {
+  const id = req.params.employee_id;
+  const query = "DELETE FROM employee WHERE employee_id=?;";
+  const values = [id];
+
+  connection.query(query, values, (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.json(results);
+    }
   });
 });
+
+//get all vacations
+
+// app.get("/vacation", (req, res) => {
+//   const query = "SELECT * FROM vacation";
+
+//   connection.query(query, (error, results) => {
+//     if (error) {
+//       console.log(error);
+//     } else {
+//       res.json(results);
+//     }
+//   });
+// });
