@@ -134,6 +134,18 @@ app.get("/employeestatus/:employee_id", (req, res) => {
    });
 });
 
-// SELECT employee.name, status.status
-// FROM employee
-// INNER JOIN status ON employee.status_id = status.status_id;
+// get employee role
+
+app.get("/employeerole/:employee_id", (req, res) => {
+   const id = req.params.employee_id;
+   const query = "SELECT employee.employee_id, employee.name, roles.role_name FROM employeenINNER JOIN roles ON employee.status_id = roles.role_id;";
+   const values = [id];
+
+   connection.query(query, values, (error, results) => {
+      if (error) {
+         console.log(error);
+      } else {
+         res.json(results);
+      }
+   });
+});
