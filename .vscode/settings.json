@@ -1,4 +1,5 @@
 {
   "appService.defaultWebAppToDeploy": "/subscriptions/1828c8f0-18e7-42b0-a482-396ee3f05bb9/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/semesterprojekt-eeberhardt",
-  "appService.deploySubpath": "backend"
+  "appService.deploySubpath": "backend",
+  "liveServer.settings.port": 5501
 }
