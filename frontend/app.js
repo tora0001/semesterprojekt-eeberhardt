@@ -152,8 +152,7 @@ function saveEmployee() {
       console.log("Employee saved:", data);
 
       refreshEmployeeList();
-    })
-    .catch((error) => console.error("Error saving employee:", error));
+    });
 }
 
 function deleteEmployee(employeeId) {
@@ -204,19 +203,27 @@ function performDeleteEmployee(employeeId) {
       console.log("Employee deleted:", data);
 
       refreshEmployeeList();
-    })
-    .catch((error) => console.error("Error deleting employee:", error));
+    });
 }
 
 function addNewVacation() {
-  const formHTML = /*HTML*/ `
+  fetch(`${endpoint}/employees`)
+    .then((response) => response.json())
+    .then((employeeData) => {
+      const employeeSelectOptions = employeeData
+        .map(
+          (employee) => `
+        <option value="${employee.employee_id}">${employee.name}</option>
+      `
+        )
+        .join("");
+
+      const formHTML = /*HTML*/ `
     <form id="vacationForm">
       <label for="employeeSelect">Employee:</label>
       <select id="employeeSelect" name="employeeSelect">
-        <option value="1">Ansat 1</option>
-        <option value="2">Ansat 2</option>
-        <!-- Add more options as needed -->
-      </select>
+        ${employeeSelectOptions}
+          </select>
 
       <label for="startDate">Start Date:</label>
       <input type="date" id="startDate" name="startDate" required>
@@ -230,7 +237,8 @@ function addNewVacation() {
       </div>
     </form>`;
 
-  mainContent.innerHTML = formHTML;
+      mainContent.innerHTML = formHTML;
+    });
 }
 
 function refreshEmployeeList() {
@@ -239,8 +247,7 @@ function refreshEmployeeList() {
     .then((data) => {
       employees = data;
       populateEmployeeTable(employees);
-    })
-    .catch((error) => console.error("Error fetching employees:", error));
+    });
 }
 
 function refreshVacationList() {
@@ -249,8 +256,7 @@ function refreshVacationList() {
     .then((data) => {
       vacations = data;
       populateVacationTable(vacations);
-    })
-    .catch((error) => console.error("Error fetching employees:", error));
+    });
 }
 
 function formatDate(inputDate) {
