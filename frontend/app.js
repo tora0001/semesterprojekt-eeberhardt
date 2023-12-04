@@ -157,23 +157,55 @@ function saveEmployee() {
 }
 
 function deleteEmployee(employeeId) {
-  const confirmDelete = confirm("Er du sikker på at du vil fjerne denne medarbejder?");
+  const confirmationModalHTML = /*HTML*/ `
+    <div id="confirmationModal" class="modal">
+      <div id="modalContent" class="modal-content">
+        Er du sikker på at du vil fjerne denne medarbejder?
+      </div>
+      <div class="modal-buttons">
+        <button id="confirmBtn" class="buttons">Ja</button>
+        <button id="cancelBtn" class="buttons">Nej</button>
+      </div>
+    </div>
+  `;
 
-  if (confirmDelete) {
-    const url = `${endpoint}/employee/${employeeId}`;
-    const method = "DELETE";
+  mainContent.innerHTML = confirmationModalHTML;
 
-    fetch(url, {
-      method: method,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Employee deleted:", data);
+  const modal = document.getElementById("confirmationModal");
+  const confirmBtn = document.getElementById("confirmBtn");
+  const cancelBtn = document.getElementById("cancelBtn");
 
-        refreshEmployeeList();
-      })
-      .catch((error) => console.error("Error deleting employee:", error));
+  modal.style.display = "block";
+
+  confirmBtn.onclick = function () {
+    closeModal();
+    performDeleteEmployee(employeeId);
+  };
+
+  cancelBtn.onclick = function () {
+    closeModal();
+    refreshEmployeeList();
+  };
+
+  function closeModal() {
+    modal.style.display = "none";
   }
+}
+
+function performDeleteEmployee(employeeId) {
+  const url = `${endpoint}/employee/${employeeId}`;
+  const method = "DELETE";
+
+  fetch(url, {
+    method: method,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Employee deleted:", data);
+
+      refreshEmployeeList();
+    })
+    .catch((error) => console.error("Error deleting employee:", error));
 }
 
 function addNewVacation() {

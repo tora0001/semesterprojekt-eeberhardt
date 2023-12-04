@@ -1,79 +1,101 @@
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-  
-  header {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 1rem;
-  }
-  
-  .container {
-    display: flex;
-    flex: 1;
-  }
-  
-  nav {
-    background-color: #eee;
-    padding: 1rem;
-    width: 200px;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  ul {
-    list-style-type: none;
-    padding: 0;
-    flex: 1;
-  }
-  
-  li {
-    cursor: pointer;
-    margin-bottom: 1rem;
-    padding: 0.5rem;
-    background-color: #ddd;
-  }
-  
-  main {
-    padding: 1rem;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  table {
-    width: 80%;
-    border-collapse: collapse;
-    margin-top: 0.5rem;
-  }
-  
-  th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-  }
-  
-  th {
-    background-color: #f2f2f2;
-  }
-  
-  button {
-    margin-top: 1rem;
-    padding: 0.5rem;
-    cursor: pointer;
-  }
-  
-  /* Add this new rule for right-aligned buttons */
-  div.buttons {
-    display: flex;
-    justify-content: flex-end;
-    width: 80%; /* Match the table width */
-  }
-  
+  margin: 0;
+  padding: 0;
+  font-family: "Arial", sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 1rem;
+}
+
+.container {
+  display: flex;
+  flex: 1;
+}
+
+nav {
+  background-color: #eee;
+  padding: 1rem;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  flex: 1;
+}
+
+li {
+  cursor: pointer;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background-color: #ddd;
+}
+
+main {
+  padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+table {
+  width: 80%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+button {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+/* Add this new rule for right-aligned buttons */
+div.buttons {
+  display: flex;
+  justify-content: flex-end;
+  width: 80%; /* Match the table width */
+}
+
+/* confirm delete modal style */
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modal-content {
+  margin-bottom: 20px;
+}
+
+.modal-buttons {
+  text-align: center;
+}
