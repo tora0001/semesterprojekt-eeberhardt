@@ -2,6 +2,11 @@
 let employees = [];
 let vacations = [];
 
+//brug dette endpoint for at teste med azure
+// const endpoint = "https://semesterprojekt-eeberhardt.azurewebsites.net";
+
+//brug dette endpoint for at teste lokalt
+
 const endpoint = "http://localhost:4000";
 
 window.addEventListener("load", start);
@@ -144,7 +149,7 @@ function addNewVacation() {
 
 
 function refreshEmployeeList() {
-  fetch(`${endpoint}/employee`)
+  fetch(`${endpoint}/employees`)
     .then((response) => response.json())
     .then((data) => {
       employees = data;
@@ -154,7 +159,7 @@ function refreshEmployeeList() {
 }
 
 function refreshVacationList() {
-  fetch(`${endpoint}/vacation`)
+  fetch(`${endpoint}/vacations`)
     .then((response) => response.json())
     .then((data) => {
       vacations = data;
