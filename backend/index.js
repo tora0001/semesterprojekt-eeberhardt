@@ -27,7 +27,7 @@ const connection = mysql.createConnection(dbconfig);
 
 //get all imployees
 
-app.get("/employee", (req, res) => {
+app.get("/employees", (req, res) => {
    const query = "SELECT * FROM employee";
 
    connection.query(query, (error, results) => {
@@ -38,6 +38,19 @@ app.get("/employee", (req, res) => {
       }
    });
 });
+
+app.get("/employee", (req, res) => {
+      const query = "SELECT name, e.employee_id, r.role_name, s.status FROM employee e INNER JOIN roles r ON e.role_id = r.role_id INNER JOIN status s ON e.status_id = s.status_id;";
+      
+      connection.query(query, (error, results) => {
+         if (error) {
+            console.log(error);
+         } else {
+            res.json(results);
+         }
+      });
+   });
+
 
 //get employee by id
 
@@ -106,17 +119,30 @@ app.delete("/employee/:employee_id", (req, res) => {
 
 //get all vacations
 
-// app.get("/vacation", (req, res) => {
-//   const query = "SELECT * FROM vacation";
+ app.get("/vacations", (req, res) => {
+   const query = "SELECT * FROM vacation";
 
-//   connection.query(query, (error, results) => {
-//     if (error) {
-//       console.log(error);
-//     } else {
-//       res.json(results);
-//     }
-//   });
-// });
+   connection.query(query, (error, results) => {
+     if (error) {
+       console.log(error);
+     } else {
+       res.json(results);
+     }
+   });
+ });
+
+ // get vacations for table
+ app.get("/vacation", (req, res) => {
+   const query = "SELECT e.name, v.startDate, v.endDate FROM vacation v INNER JOIN employee e ON v.employee_id = e.employee_id;";
+   
+   connection.query(query, (error, results) => {
+      if (error) {
+        console.log(error);
+      } else {
+        res.json(results);
+      }
+    });
+  });
 
 // get employee status
 
