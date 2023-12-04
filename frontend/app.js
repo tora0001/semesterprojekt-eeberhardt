@@ -110,7 +110,11 @@ function addNewEmployee() {
       <input type="text" id="employeeName" name="employeeName" required>
 
       <label for="employeeRole">Stilling:</label>
-      <input type="text" id="employeeRole" name="employeeRole" required>
+      <select type="text" id="employeeRole" name="employeeRole" required>
+        <option value = "1">Manager</option>
+        <option value = "2">Medarbejder</option>
+        <option value = "3">Praktikant</option>
+      </select>
 
       <label for="vacationDays">Feriedage Til Rådighed:</label>
       <input type="text" id="vacationDays" name="vacationDays" required>
