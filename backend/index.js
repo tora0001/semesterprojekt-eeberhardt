@@ -165,6 +165,12 @@ app.get("/employeestatus/:employee_id", (req, res) => {
   });
 });
 
+// create new vacation
+
+// delete vacation
+
+// edit vacation
+
 // get employee role
 
 app.get("/employeerole/:employee_id", (req, res) => {
