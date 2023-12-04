@@ -152,9 +152,7 @@ function saveEmployee() {
     body: JSON.stringify(employeeData),
   })
     .then((response) => response.json())
-    .then((data) => {
-      console.log("Employee saved:", data);
-
+    .then(() => {
       refreshEmployeeList();
     });
 }
@@ -203,9 +201,7 @@ function performDeleteEmployee(employeeId) {
     method: method,
   })
     .then((response) => response.json())
-    .then((data) => {
-      console.log("Employee deleted:", data);
-
+    .then(() => {
       refreshEmployeeList();
     });
 }
