@@ -212,7 +212,7 @@ function addNewVacation() {
     .then((employeeData) => {
       const employeeSelectOptions = employeeData
         .map(
-          (employee) => `
+          (employee) => /*HTML*/ `
         <option value="${employee.employee_id}">${employee.name}</option>
       `
         )
