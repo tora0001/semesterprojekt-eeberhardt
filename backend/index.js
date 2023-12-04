@@ -28,7 +28,7 @@ const connection = mysql.createConnection(dbconfig);
 //get all imployees
 
 app.get("/employee", (req, res) => {
-   const query = "SELECT * FROM employee";
+  const query = "SELECT * FROM employee";
 
   connection.query(query, (error, results) => {
     if (error) {
@@ -40,17 +40,16 @@ app.get("/employee", (req, res) => {
 });
 
 app.get("/employees", (req, res) => {
-      const query = "SELECT name, e.employee_id, r.role_name, s.status FROM employee e INNER JOIN roles r ON e.role_id = r.role_id INNER JOIN status s ON e.status_id = s.status_id;";
-      
-      connection.query(query, (error, results) => {
-         if (error) {
-            console.log(error);
-         } else {
-            res.json(results);
-         }
-      });
-   });
+  const query = "SELECT name, e.employee_id, r.role_name, s.status FROM employee e INNER JOIN roles r ON e.role_id = r.role_id INNER JOIN status s ON e.status_id = s.status_id;";
 
+  connection.query(query, (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
 
 //get employee by id
 
@@ -72,14 +71,8 @@ app.get("/employee/:employee_id", (req, res) => {
 
 app.post("/employee", (req, res) => {
   const employee = req.body;
-  const query =
-    "INSERT INTO employee(name, role_id, ferieDage, status_id) values(?,?,?,?);";
-  const values = [
-    employee.name,
-    employee.role_id,
-    employee.ferieDage,
-    employee.status_id,
-  ];
+  const query = "INSERT INTO employee(name, role_id, vacation_days, status_id) values(?,?,?,?);";
+  const values = [employee.name, employee.role_id, employee.vacation_days, employee.status_id];
 
   connection.query(query, values, (error, results) => {
     if (error) {
@@ -95,15 +88,8 @@ app.post("/employee", (req, res) => {
 app.put("/employee/:employee_id", (req, res) => {
   const id = req.params.employee_id;
   const employee = req.body;
-  const query =
-    "UPDATE employee SET name=?, role_id=?, ferieDage=?, status_id=? WHERE employee_id=?;";
-  const values = [
-    employee.name,
-    employee.role_id,
-    employee.ferieDage,
-    employee.status_id,
-    id,
-  ];
+  const query = "UPDATE employee SET name=?, role_id=?, ferieDage=?, status_id=? WHERE employee_id=?;";
+  const values = [employee.name, employee.role_id, employee.ferieDage, employee.status_id, id];
 
   connection.query(query, values, (error, results) => {
     if (error) {
@@ -132,21 +118,20 @@ app.delete("/employee/:employee_id", (req, res) => {
 
 // get all vacations
 app.get("/vacation", (req, res) => {
-   const query = "SELECT * FROM vacation";
+  const query = "SELECT * FROM vacation";
 
-   connection.query(query, (error, results) => {
-     if (error) {
-       console.log(error);
-     } else {
-       res.json(results);
-     }
-   });
+  connection.query(query, (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.json(results);
+    }
+  });
 });
 
 // get selected data for table view
 app.get("/vacations", (req, res) => {
-  const query =
-    "SELECT employee.employee_id, employee.name, vacation.startDate, vacation.endDate FROM employee INNER JOIN vacation ON employee.employee_id = vacation.employee_id;";
+  const query = "SELECT employee.employee_id, employee.name, vacation.startDate, vacation.endDate FROM employee INNER JOIN vacation ON employee.employee_id = vacation.employee_id;";
 
   connection.query(query, (error, results) => {
     if (error) {
@@ -161,8 +146,7 @@ app.get("/vacations", (req, res) => {
 
 app.get("/employeestatus/:employee_id", (req, res) => {
   const id = req.params.employee_id;
-  const query =
-    "SELECT employee.name, status.status FROM employee INNER JOIN status ON employee.status_id = status.status_id WHERE employee_id=?;";
+  const query = "SELECT employee.name, status.status FROM employee INNER JOIN status ON employee.status_id = status.status_id WHERE employee_id=?;";
   const values = [id];
 
   connection.query(query, values, (error, results) => {
@@ -184,8 +168,7 @@ app.get("/employeestatus/:employee_id", (req, res) => {
 
 app.get("/employeerole/:employee_id", (req, res) => {
   const id = req.params.employee_id;
-  const query =
-    "SELECT employee.employee_id, employee.name, roles.role_name FROM employee INNER JOIN roles ON employee.status_id = roles.role_id;";
+  const query = "SELECT employee.employee_id, employee.name, roles.role_name FROM employee INNER JOIN roles ON employee.status_id = roles.role_id;";
   const values = [id];
 
   connection.query(query, values, (error, results) => {
