@@ -13,30 +13,30 @@ const port = process.env.PORT || 4000;
 app.listen(port, () => console.log(`Test APP listening on port ${port}`));
 
 const dbconfig = {
-   host: process.env.MYSQL_HOST,
-   database: process.env.MYSQL_DATABASE,
-   user: process.env.MYSQL_USER,
-   password: process.env.MYSQL_PASSWORD,
+  host: process.env.MYSQL_HOST,
+  database: process.env.MYSQL_DATABASE,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
 };
 
 if (process.env.MYSQL_CERT) {
-   dbconfig.ssl = { cs: fs.readFileSync("DigiCertGlobalRootCA.crt.pem") };
+  dbconfig.ssl = { cs: fs.readFileSync("DigiCertGlobalRootCA.crt.pem") };
 }
 
 const connection = mysql.createConnection(dbconfig);
 
 //get all imployees
 
-app.get("/employees", (req, res) => {
+app.get("/employee", (req, res) => {
    const query = "SELECT * FROM employee";
 
-   connection.query(query, (error, results) => {
-      if (error) {
-         console.log(error);
-      } else {
-         res.json(results);
-      }
-   });
+  connection.query(query, (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.json(results);
+    }
+  });
 });
 
 app.get("/employee", (req, res) => {
@@ -55,123 +55,131 @@ app.get("/employee", (req, res) => {
 //get employee by id
 
 app.get("/employee/:employee_id", (req, res) => {
-   const id = req.params.employee_id;
-   const query = "SELECT * FROM employee WHERE employee_id=?;";
-   const values = [id];
+  const id = req.params.employee_id;
+  const query = "SELECT * FROM employee WHERE employee_id=?;";
+  const values = [id];
 
-   connection.query(query, values, (error, results) => {
-      if (error) {
-         console.log(error);
-      } else {
-         res.json(results);
-      }
-   });
+  connection.query(query, values, (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.json(results);
+    }
+  });
 });
 
 //create new employee
 
 app.post("/employee", (req, res) => {
-   const employee = req.body;
-   const query = "INSERT INTO employee(name, rolle_id, ferieDage, status_id) values(?,?,?,?);";
-   const values = [employee.name, employee.rolle_id, employee.ferieDage, employee.status_id];
+  const employee = req.body;
+  const query =
+    "INSERT INTO employee(name, rolle_id, ferieDage, status_id) values(?,?,?,?);";
+  const values = [
+    employee.name,
+    employee.rolle_id,
+    employee.ferieDage,
+    employee.status_id,
+  ];
 
-   connection.query(query, values, (error, results) => {
-      if (error) {
-         console.log(error);
-      } else {
-         res.json(results);
-      }
-   });
+  connection.query(query, values, (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.json(results);
+    }
+  });
 });
 
 //update employee by id
 
 app.put("/employee/:employee_id", (req, res) => {
-   const id = req.params.employee_id;
-   const employee = req.body;
-   const query = "UPDATE employee SET name=?, rolle_id=?, ferieDage=?, status_id=? WHERE employee_id=?;";
-   const values = [employee.name, employee.rolle_id, employee.ferieDage, employee.status_id, id];
+  const id = req.params.employee_id;
+  const employee = req.body;
+  const query =
+    "UPDATE employee SET name=?, rolle_id=?, ferieDage=?, status_id=? WHERE employee_id=?;";
+  const values = [
+    employee.name,
+    employee.rolle_id,
+    employee.ferieDage,
+    employee.status_id,
+    id,
+  ];
 
-   connection.query(query, values, (error, results) => {
-      if (error) {
-         console.log(error);
-      } else {
-         res.json(results);
-      }
-   });
+  connection.query(query, values, (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.json(results);
+    }
+  });
 });
 
 //delete employee by id
 
 app.delete("/employee/:employee_id", (req, res) => {
-   const id = req.params.employee_id;
-   const query = "DELETE FROM employee WHERE employee_id=?;";
-   const values = [id];
+  const id = req.params.employee_id;
+  const query = "DELETE FROM employee WHERE employee_id=?;";
+  const values = [id];
 
-   connection.query(query, values, (error, results) => {
-      if (error) {
-         console.log(error);
-      } else {
-         res.json(results);
-      }
-   });
+  connection.query(query, values, (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.json(results);
+    }
+  });
 });
 
 //get all vacations
 
- app.get("/vacations", (req, res) => {
-   const query = "SELECT * FROM vacation";
+// app.get("/vacation", (req, res) => {
+//   const query = "SELECT * FROM vacation";
 
-   connection.query(query, (error, results) => {
-     if (error) {
-       console.log(error);
-     } else {
-       res.json(results);
-     }
-   });
- });
-
- // get vacations for table
- app.get("/vacation", (req, res) => {
-   const query = "SELECT e.name, v.startDate, v.endDate FROM vacation v INNER JOIN employee e ON v.employee_id = e.employee_id;";
-   
-   connection.query(query, (error, results) => {
-      if (error) {
-        console.log(error);
-      } else {
-        res.json(results);
-      }
-    });
-  });
+//   connection.query(query, (error, results) => {
+//     if (error) {
+//       console.log(error);
+//     } else {
+//       res.json(results);
+//     }
+//   });
+// });
 
 // get employee status
 
 app.get("/employeestatus/:employee_id", (req, res) => {
-   const id = req.params.employee_id;
-   const query = "SELECT employee.name, status.status FROM employee INNER JOIN status ON employee.status_id = status.status_id WHERE employee_id=?;";
-   const values = [id];
+  const id = req.params.employee_id;
+  const query =
+    "SELECT employee.name, status.status FROM employee INNER JOIN status ON employee.status_id = status.status_id WHERE employee_id=?;";
+  const values = [id];
 
-   connection.query(query, values, (error, results) => {
-      if (error) {
-         console.log(error);
-      } else {
-         res.json(results);
-      }
-   });
+  connection.query(query, values, (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.json(results);
+    }
+  });
 });
+
+// create new vacation
+
+// delete vacation
+
+// edit vacation
 
 // get employee role
 
 app.get("/employeerole/:employee_id", (req, res) => {
-   const id = req.params.employee_id;
-   const query = "SELECT employee.employee_id, employee.name, roles.role_name FROM employeenINNER JOIN roles ON employee.status_id = roles.role_id;";
-   const values = [id];
+  const id = req.params.employee_id;
+  const query =
+    "SELECT employee.employee_id, employee.name, roles.role_name FROM employeenINNER JOIN roles ON employee.status_id = roles.role_id;";
+  const values = [id];
 
-   connection.query(query, values, (error, results) => {
-      if (error) {
-         console.log(error);
-      } else {
-         res.json(results);
-      }
-   });
+  connection.query(query, values, (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.json(results);
+    }
+  });
 });
