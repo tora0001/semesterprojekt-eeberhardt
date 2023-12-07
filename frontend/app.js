@@ -199,20 +199,22 @@ function saveEmployee() {
 }
 
 function editEmployeeClicked(employee) {
+  console.log(employee);
   const update = document.querySelector("#updateEmployeeForm");
 
   update.employeeNameUpdate.value = employee.employeeName;
   update.employeeRoleUpdate.value = employee.employeeRole;
   update.vacationsDaysUpdate.value = employee.vacationDays;
-
-  update.setAttribute("data-id", employee.id);
 }
 
 function editEmployee(employeeId) {
+  console.log(employees);
+  const foundEmployee = employees.find((employee) => employee.employee_id === employeeId);
+  console.log(foundEmployee);
   const updateForm = /*HTML*/ `
     <form id="updateEmployeeForm">
       <label for="employeeName">Navn:</label>
-      <input type="text" id="employeeNameUpdate" name="employeeName" required>
+      <input type="text" id="employeeNameUpdate" name="employeeName" required value="${foundEmployee.name}">
 
       <label for="employeeRole">Stilling:</label>
       <select type="text" id="employeeRoleUpdate" name="employeeRole" required>
@@ -357,7 +359,9 @@ function addNewVacation() {
       mainContent.innerHTML = formHTML;
     });
 }
+function editVacation() {}
 
+function performEditVacation() {}
 
 function deleteVacation(vacationId) {
   const confirmationModalHTML = /*HTML*/ `
