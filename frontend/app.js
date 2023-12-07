@@ -277,6 +277,97 @@ function addNewVacation() {
     });
 }
 
+function saveVacation() {
+  const employeeSelect = document.getElementById("employeeSelect");
+  const employeeId = employeeSelect.options[employeeSelect.selectedIndex].value;
+  const startDate = document.getElementById("startDate").value;
+  const endDate = document.getElementById("endDate").value;
+
+  const vacationData = {
+    employee_id: employeeId,
+    startDate: startDate,
+    endDate: endDate,
+  };
+
+  const url = `${endpoint}/vacation`;
+  const method = "POST";
+
+  fetch(url, {
+    method: method,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(vacationData),
+  })
+    .then((response) => response.json())
+    .then(() => {
+      refreshVacationList();
+    });
+}
+
+function deleteVacation(vacationId) {
+  const confirmationModalHTML = /*HTML*/ `
+    <div id="confirmationModal" class="modal">
+      <div id="modalContent" class="modal-content">
+        Are you sure you want to delete this vacation?
+      </div>
+      <div class="modal-buttons">
+        <button id="confirmBtn" class="buttons">Yes</button>
+        <button id="cancelBtn" class="buttons">No</button>
+      </div>
+    </div>
+  `;
+
+  mainContent.innerHTML = confirmationModalHTML;
+
+  const modal = document.getElementById("confirmationModal");
+  const confirmBtn = document.getElementById("confirmBtn");
+  const cancelBtn = document.getElementById("cancelBtn");
+
+  modal.style.display = "block";
+
+  confirmBtn.onclick = function () {
+    closeModal();
+    performDeleteVacation(vacationId);
+  };
+
+  cancelBtn.onclick = function () {
+    closeModal();
+    refreshVacationList();
+  };
+
+  function closeModal() {
+    modal.style.display = "none";
+  }
+}
+
+function editVacation(vacationId) {
+  fetch(`${endpoint}/vacation/${vacationId}`)
+    .then((response) => response.json())
+    .then((vacationData) => {
+      const formHTML = /*HTML*/ `
+    <form id="vacationForm">
+      <label for="employeeSelect">Employee:</label>
+      <select id="employeeSelect" name="employeeSelect">
+        <option value="${vacationData.employee_id}">${vacationData.name}</option>
+      </select>
+
+      <label for="startDate">Start Date:</label>
+      <input type="date" id="startDate" name="startDate" value="${formatDate(vacationData.startDate)}" required>
+
+      <label for="endDate">End Date:</label>
+      <input type="date" id="endDate" name="endDate" value="${formatDate(vacationData.endDate)}" required>
+
+      <div class="buttons">
+        <button type="button" onclick="saveVacation(${vacationId}, 'edit')">Save</button>
+        <button type="button" onclick="cancelForm()">Cancel</button>
+      </div>
+    </form>`;
+
+      mainContent.innerHTML = formHTML;
+    });
+}
+
 function refreshEmployeeList() {
   fetch(`${endpoint}/employees`)
     .then((response) => response.json())
