@@ -39,9 +39,9 @@ function populateEmployeeTable(employeeData) {
       <thead>
         <tr>
           <th>Medarbejder ID</th>
-          <th class="employeeTableName" onclick="sortTableByName()">Navn</th>
-          <th class="employeeTableRole" onclick="sortTableByRole()">Stilling</th>
-          <th class="employeeTableStatus" onclick="sortTableByStatus()">Status</th>
+          <th id="employeeTableName" onclick="sortTableByName()">Navn</th>
+          <th id="employeeTableRole" onclick="sortTableByRole()">Stilling</th>
+          <th id="employeeTableStatus" onclick="sortTableByStatus()">Status</th>
           <th>Handlinger</th>
         </tr>
       </thead>
@@ -157,7 +157,7 @@ function addNewEmployee() {
 
       <div class="buttons">
         <button type="button" onclick="saveEmployee('create')">Opret</button>
-        <button type="button" onclick="cancelForm()">Annuller</button>
+        <button type="button" onclick="refreshEmployeeList()">Annuller</button>
       </div>
     </form>`;
 
@@ -203,10 +203,6 @@ function editEmployeeClicked(employee) {
 }
 
 function editEmployee(employeeId) {
-   console.log(employees);
-   const employeeById = employees.find((employee) => employee.id === employeeId);
-   console.log(employeeById);
-
    const updateForm = /*HTML*/ `
     <form id="updateEmployeeForm">
       <label for="employeeName">Navn:</label>
@@ -229,8 +225,6 @@ function editEmployee(employeeId) {
     </form>`;
 
    mainContent.innerHTML = updateForm;
-
-   editEmployeeClicked(employeeById);
 
    const confirmBtn = document.getElementById("confirmBtn");
    const cancelBtn = document.getElementById("cancelBtn");
@@ -298,7 +292,6 @@ function deleteEmployee(employeeId) {
    confirmBtn.onclick = function () {
       closeModal();
       performDeleteEmployee(employeeId);
-      refreshEmployeeList();
    };
 
    cancelBtn.onclick = function () {
