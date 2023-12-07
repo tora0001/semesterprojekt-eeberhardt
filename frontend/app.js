@@ -39,9 +39,9 @@ function populateEmployeeTable(employeeData) {
       <thead>
         <tr>
           <th>Medarbejder ID</th>
-          <th id="employeeTableName" onclick="sortTableByName()">Navn</th>
-          <th id="employeeTableRole" onclick="sortTableByRole()">Stilling</th>
-          <th id="employeeTableStatus" onclick="sortTableByStatus()">Status</th>
+          <th>Navn</th>
+          <th>Stilling</th>
+          <th>Status</th>
           <th>Handlinger</th>
         </tr>
       </thead>
@@ -66,42 +66,6 @@ function populateEmployeeTable(employeeData) {
     <div class="buttons">
     <button onclick="addNewEmployee()">Opret Ny Medarbejder</button>
     </div>`;
-
-  const employeeTableNameHeader = document.getElementById("employeeTableName");
-  employeeTableNameHeader.dataset.employeeData = JSON.stringify(employeeData);
-
-  const employeeTableRoleHeader = document.getElementById("employeeTableRole");
-  employeeTableRoleHeader.dataset.employeeData = JSON.stringify(employeeData);
-
-  const employeeTableStatusHeader = document.getElementById("employeeTableStatus");
-  employeeTableStatusHeader.dataset.employeeData = JSON.stringify(employeeData);
-}
-
-function sortTableByName() {
-  const employeeDataString = document.getElementById("employeeTableName").dataset.employeeData;
-  const employeeData = JSON.parse(employeeDataString);
-
-  employeeData.sort((a, b) => a.name.localeCompare(b.name));
-
-  populateEmployeeTable(employeeData);
-}
-
-function sortTableByRole() {
-  const employeeDataString = document.getElementById("employeeTableRole").dataset.employeeData;
-  const employeeData = JSON.parse(employeeDataString);
-
-  employeeData.sort((a, b) => a.role_name.localeCompare(b.role_name));
-
-  populateEmployeeTable(employeeData);
-}
-
-function sortTableByStatus() {
-  const employeeDataString = document.getElementById("employeeTableStatus").dataset.employeeData;
-  const employeeData = JSON.parse(employeeDataString);
-
-  employeeData.sort((a, b) => a.status.localeCompare(b.status));
-
-  populateEmployeeTable(employeeData);
 }
 
 function populateVacationTable(vacationData) {
@@ -157,7 +121,7 @@ function addNewEmployee() {
 
       <div class="buttons">
         <button type="button" onclick="saveEmployee('create')">Opret</button>
-        <button type="button" onclick="refreshEmployeeList()">Annuller</button>
+        <button type="button" onclick="cancelForm()">Annuller</button>
       </div>
     </form>`;
 
@@ -193,11 +157,57 @@ function saveEmployee() {
       });
 }
 
+function editEmployeeClicked(employee) {
+   const update = document.querySelector("#updateEmployeeForm");
+
+   update.employeeNameUpdate.value = employee.employeeName;
+   update.employeeRoleUpdate.value = employee.employeeRole;
+   update.vacationsDaysUpdate.value = employee.vacationDays;
+
+   update.setAttribute("data-id", employee.id);
+}
+
+function editEmployee(employeeId) {
+   const updateForm = /*HTML*/ `
+    <form id="updateEmployeeForm">
+      <label for="employeeName">Navn:</label>
+      <input type="text" id="employeeNameUpdate" name="employeeName" required>
+
+      <label for="employeeRole">Stilling:</label>
+      <select type="text" id="employeeRoleUpdate" name="employeeRole" required>
+        <option value = "1">Manager</option>
+        <option value = "2">Medarbejder</option>
+        <option value = "3">Praktikant</option>
+      </select>
+
+      <label for="vacationDays">Feriedage Til Rådighed:</label>
+      <input type="text" id="vacationDaysUpdate" name="vacationDays" required>
+
+      <div class="buttons">
+        <button type="button" id="confirmBtn">Opret</button>
+        <button type="button" id="cancelBtn">Annuller</button>
+      </div>
+    </form>`;
+
+   mainContent.innerHTML = updateForm;
+
+   const confirmBtn = document.getElementById("confirmBtn");
+   const cancelBtn = document.getElementById("cancelBtn");
+
+   confirmBtn.onclick = function () {
+      performEditEmployee(employeeId);
+      refreshEmployeeList();
+   };
+
+   cancelBtn.onclick = function () {
+      refreshEmployeeList();
+   };
+}
+
 function performEditEmployee(employeeId) {
-   console.log("hej");
-   const employeeName = document.getElementById("employeeName").value;
-   const employeeRole = document.getElementById("employeeRole").value;
-   const vacationDays = document.getElementById("vacationDays").value;
+   const employeeName = document.getElementById("employeeNameUpdate").value;
+   const employeeRole = document.getElementById("employeeRoleUpdate").value;
+   const vacationDays = document.getElementById("vacationDaysUpdate").value;
    const employeeStatus = 1;
 
    const employeeData = {
