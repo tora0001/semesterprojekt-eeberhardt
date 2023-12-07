@@ -131,7 +131,7 @@ app.get("/vacation", (req, res) => {
 
 // get selected data for table view
 app.get("/vacations", (req, res) => {
-  const query = "SELECT employee.employee_id, employee.name, vacation.startDate, vacation.endDate FROM employee INNER JOIN vacation ON employee.employee_id = vacation.employee_id;";
+  const query = "SELECT employee.employee_id, employee.name, vacation.vacation_id, vacation.startDate, vacation.endDate FROM employee INNER JOIN vacation ON employee.employee_id = vacation.employee_id;";
 
   connection.query(query, (error, results) => {
     if (error) {
