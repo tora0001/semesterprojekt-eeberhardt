@@ -157,7 +157,7 @@ function addNewEmployee() {
 
       <div class="buttons">
         <button type="button" onclick="saveEmployee('create')">Opret</button>
-        <button type="button" onclick="cancelForm()">Annuller</button>
+        <button type="button" onclick="refreshEmployeeList()">Annuller</button>
       </div>
     </form>`;
 
