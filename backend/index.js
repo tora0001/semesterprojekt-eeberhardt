@@ -159,13 +159,52 @@ app.get("/employeestatus/:employee_id", (req, res) => {
 });
 
 // create new vacation
+app.post("/vacation", (req, res) => {
+  const vacation = req.body;
+  const query = "INSERT INTO vacation(employee_id, startDate, endDate) values(?,?,?);";
+  const values = [vacation.employee_id, vacation.startDate, vacation.endDate];
+
+  connection.query(query, values, (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
 
 // delete vacation
+app.delete("/vacation/:vacation_id", (req, res) => {
+  const id = req.params.vacation_id;
+  const query = "DELETE FROM vacation WHERE vacation_id=?;";
+  const values = [id];
+
+  connection.query(query, values, (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
 
 // edit vacation
+app.put("/vacation/:vacation_id", (req, res) => {
+  const id = req.params.vacation_id;
+  const vacation = req.body;
+  const query = "UPDATE vacation SET employee_id=?, startDate=?, endDate=? WHERE vacation_id=?;";
+  const values = [vacation.employee_id, vacation.startDate, vacation.endDate, id];
+
+  connection.query(query, values, (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
 
 // get employee role
-
 app.get("/employeerole/:employee_id", (req, res) => {
   const id = req.params.employee_id;
   const query = "SELECT employee.employee_id, employee.name, roles.role_name FROM employee INNER JOIN roles ON employee.status_id = roles.role_id;";
