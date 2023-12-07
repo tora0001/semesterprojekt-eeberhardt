@@ -1,6 +1,8 @@
 "use strict";
 let employees = [];
 let vacations = [];
+let roles = [];
+let roleList = [];
 
 //brug dette endpoint for at teste med azure
 // const endpoint = "https://semesterprojekt-eeberhardt.azurewebsites.net";
@@ -199,13 +201,11 @@ function editEmployeeClicked(employee) {
 
    update.employeeNameUpdate.value = employee.name;
    update.employeeRoleUpdate.value = employee.role_name;
-   //    update.vacationsDaysUpdate.value = employee.vacationDays;
-   console.log(employee.role_name);
+   update.vacationsDaysUpdate.value = employee.vacation_days;
 }
 
 function editEmployee(employeeId) {
    const foundEmployee = employees.find((employee) => employee.employee_id === employeeId);
-   console.log(foundEmployee);
    const updateForm = /*HTML*/ `
     <form id="updateEmployeeForm">
       <label for="employeeName">Navn:</label>
@@ -245,6 +245,7 @@ function editEmployee(employeeId) {
 }
 
 function performEditEmployee(employeeId) {
+
    const employeeName = document.getElementById("employeeNameUpdate").value;
    const employeeRole = document.getElementById("employeeRoleUpdate").value;
    const vacationDays = document.getElementById("vacationDaysUpdate").value;
@@ -395,7 +396,6 @@ function deleteVacation(vacationId) {
 }
 
 function performDeleteVacation(vacationId) {
-   console.log(vacationId);
    const url = `${endpoint}/vacation/${vacationId}`;
    const method = "DELETE";
 
@@ -406,6 +406,14 @@ function performDeleteVacation(vacationId) {
       .then(() => {
          refreshVacationList();
       });
+}
+function refreshRoleList() {
+    fetch(`${endpoint}/roles`)
+        .then((response) => response.json())
+        .then((data) => {
+          roles = data;
+        });
+        updateRoleList();
 }
 
 function refreshEmployeeList() {
@@ -431,3 +439,10 @@ function formatDate(inputDate) {
    const formattedDate = dateObject.toISOString().split("T")[0];
    return formattedDate;
 }
+
+function updateRoleList () {
+  roles.forEach(element => {
+    roleList.push({value: element.role_id, label: element.role_name});
+  });
+}
+

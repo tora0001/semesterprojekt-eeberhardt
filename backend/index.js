@@ -218,3 +218,16 @@ app.get("/employeerole/:employee_id", (req, res) => {
     }
   });
 });
+
+// get roles 
+app.get("/roles", (req, res) => {
+  const query = "SELECT * FROM roles;";
+
+  connection.query(query, (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
