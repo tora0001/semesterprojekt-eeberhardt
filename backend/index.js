@@ -40,7 +40,7 @@ app.get("/employee", (req, res) => {
 });
 
 app.get("/employees", (req, res) => {
-  const query = "SELECT name, e.employee_id, r.role_name, s.status FROM employee e INNER JOIN roles r ON e.role_id = r.role_id INNER JOIN status s ON e.status_id = s.status_id;";
+  const query = "SELECT name, e.employee_id, e.vacation_days, r.role_name, s.status FROM employee e INNER JOIN roles r ON e.role_id = r.role_id INNER JOIN status s ON e.status_id = s.status_id;";
 
   connection.query(query, (error, results) => {
     if (error) {
@@ -131,7 +131,7 @@ app.get("/vacation", (req, res) => {
 
 // get selected data for table view
 app.get("/vacations", (req, res) => {
-  const query = "SELECT employee.employee_id, employee.name, vacation.startDate, vacation.endDate FROM employee INNER JOIN vacation ON employee.employee_id = vacation.employee_id;";
+  const query = "SELECT employee.employee_id, employee.name, vacation.vacation_id, vacation.startDate, vacation.endDate FROM employee INNER JOIN vacation ON employee.employee_id = vacation.employee_id;";
 
   connection.query(query, (error, results) => {
     if (error) {
