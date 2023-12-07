@@ -157,7 +157,7 @@ function addNewEmployee() {
 
       <div class="buttons">
         <button type="button" onclick="saveEmployee('create')">Opret</button>
-        <button type="button" onclick="refreshEmployeeList()">Annuller</button>
+        <button type="button" onclick="cancelForm()">Annuller</button>
       </div>
     </form>`;
 
@@ -179,6 +179,82 @@ function saveEmployee() {
 
   const url = `${endpoint}/employee`;
   const method = "POST";
+
+  fetch(url, {
+    method: method,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(employeeData),
+  })
+    .then((response) => response.json())
+    .then(() => {
+      refreshEmployeeList();
+    });
+}
+
+function editEmployeeClicked(employee) {
+  const update = document.querySelector("#updateEmployeeForm");
+
+  update.employeeNameUpdate.value = employee.employeeName;
+  update.employeeRoleUpdate.value = employee.employeeRole;
+  update.vacationsDaysUpdate.value = employee.vacationDays;
+
+  update.setAttribute("data-id", employee.id);
+}
+
+function editEmployee(employeeId) {
+  const updateForm = /*HTML*/ `
+    <form id="updateEmployeeForm">
+      <label for="employeeName">Navn:</label>
+      <input type="text" id="employeeNameUpdate" name="employeeName" required>
+
+      <label for="employeeRole">Stilling:</label>
+      <select type="text" id="employeeRoleUpdate" name="employeeRole" required>
+        <option value = "1">Manager</option>
+        <option value = "2">Medarbejder</option>
+        <option value = "3">Praktikant</option>
+      </select>
+
+      <label for="vacationDays">Feriedage Til Rådighed:</label>
+      <input type="text" id="vacationDaysUpdate" name="vacationDays" required>
+
+      <div class="buttons">
+        <button type="button" id="confirmBtn">Opret</button>
+        <button type="button" id="cancelBtn">Annuller</button>
+      </div>
+    </form>`;
+
+  mainContent.innerHTML = updateForm;
+
+  const confirmBtn = document.getElementById("confirmBtn");
+  const cancelBtn = document.getElementById("cancelBtn");
+
+  confirmBtn.onclick = function () {
+    performEditEmployee(employeeId);
+    refreshEmployeeList();
+  };
+
+  cancelBtn.onclick = function () {
+    refreshEmployeeList();
+  };
+}
+
+function performEditEmployee(employeeId) {
+  const employeeName = document.getElementById("employeeNameUpdate").value;
+  const employeeRole = document.getElementById("employeeRoleUpdate").value;
+  const vacationDays = document.getElementById("vacationDaysUpdate").value;
+  const employeeStatus = 1;
+
+  const employeeData = {
+    name: employeeName,
+    role_id: employeeRole,
+    vacation_days: vacationDays,
+    status_id: employeeStatus,
+  };
+
+  const url = `${endpoint}/employee/${employeeId}`;
+  const method = "PUT";
 
   fetch(url, {
     method: method,
