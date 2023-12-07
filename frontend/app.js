@@ -73,12 +73,15 @@ function populateEmployeeTable(employeeData) {
   const employeeTableRoleHeader = document.getElementById("employeeTableRole");
   employeeTableRoleHeader.dataset.employeeData = JSON.stringify(employeeData);
 
-  const employeeTableStatusHeader = document.getElementById("employeeTableStatus");
+  const employeeTableStatusHeader = document.getElementById(
+    "employeeTableStatus"
+  );
   employeeTableStatusHeader.dataset.employeeData = JSON.stringify(employeeData);
 }
 
 function sortTableByName() {
-  const employeeDataString = document.getElementById("employeeTableName").dataset.employeeData;
+  const employeeDataString =
+    document.getElementById("employeeTableName").dataset.employeeData;
   const employeeData = JSON.parse(employeeDataString);
 
   employeeData.sort((a, b) => a.name.localeCompare(b.name));
@@ -87,7 +90,8 @@ function sortTableByName() {
 }
 
 function sortTableByRole() {
-  const employeeDataString = document.getElementById("employeeTableRole").dataset.employeeData;
+  const employeeDataString =
+    document.getElementById("employeeTableRole").dataset.employeeData;
   const employeeData = JSON.parse(employeeDataString);
 
   employeeData.sort((a, b) => a.role_name.localeCompare(b.role_name));
@@ -96,7 +100,8 @@ function sortTableByRole() {
 }
 
 function sortTableByStatus() {
-  const employeeDataString = document.getElementById("employeeTableStatus").dataset.employeeData;
+  const employeeDataString = document.getElementById("employeeTableStatus")
+    .dataset.employeeData;
   const employeeData = JSON.parse(employeeDataString);
 
   employeeData.sort((a, b) => a.status.localeCompare(b.status));
@@ -350,6 +355,55 @@ function addNewVacation() {
     </form>`;
 
       mainContent.innerHTML = formHTML;
+    });
+}
+
+
+function deleteVacation(vacationId) {
+  const confirmationModalHTML = /*HTML*/ `
+    <div id="confirmationModal" class="modal">
+      <div id="modalContent" class="modal-content">
+        Er du sikker på at du vil fjerne denne ferie?
+      </div>
+      <div class="modal-buttons">
+        <button id="confirmBtn" class="buttons">Ja</button>
+        <button id="cancelBtn" class="buttons">Nej</button>
+      </div>
+    </div>
+  `;
+
+  mainContent.innerHTML = confirmationModalHTML;
+
+  const modal = document.getElementById("confirmationModal");
+  const confirmBtn = document.getElementById("confirmBtn");
+  const cancelBtn = document.getElementById("cancelBtn");
+
+  modal.style.display = "block";
+
+  confirmBtn.onclick = function () {
+    closeModal();
+    performDeleteVacation(vacationId);
+  };
+  cancelBtn.onclick = function () {
+    closeModal();
+    refreshVacationList();
+  };
+  function closeModal() {
+    modal.style.display = "none";
+  }
+}
+
+function performDeleteVacation(vacationId) {
+  console.log(vacationId);
+  const url = `${endpoint}/vacation/${vacationId}`;
+  const method = "DELETE";
+
+  fetch(url, {
+    method: method,
+  })
+    .then((response) => response.json())
+    .then(() => {
+      refreshVacationList();
     });
 }
 
