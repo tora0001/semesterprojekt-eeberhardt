@@ -39,9 +39,9 @@ function populateEmployeeTable(employeeData) {
       <thead>
         <tr>
           <th>Medarbejder ID</th>
-          <th>Navn</th>
-          <th>Stilling</th>
-          <th>Status</th>
+          <th id="employeeTableName" onclick="sortTableByName()">Navn</th>
+          <th id="employeeTableRole" onclick="sortTableByRole()">Stilling</th>
+          <th id="employeeTableStatus" onclick="sortTableByStatus()">Status</th>
           <th>Handlinger</th>
         </tr>
       </thead>
@@ -66,6 +66,42 @@ function populateEmployeeTable(employeeData) {
     <div class="buttons">
     <button onclick="addNewEmployee()">Opret Ny Medarbejder</button>
     </div>`;
+
+  const employeeTableNameHeader = document.getElementById("employeeTableName");
+  employeeTableNameHeader.dataset.employeeData = JSON.stringify(employeeData);
+
+  const employeeTableRoleHeader = document.getElementById("employeeTableRole");
+  employeeTableRoleHeader.dataset.employeeData = JSON.stringify(employeeData);
+
+  const employeeTableStatusHeader = document.getElementById("employeeTableStatus");
+  employeeTableStatusHeader.dataset.employeeData = JSON.stringify(employeeData);
+}
+
+function sortTableByName() {
+  const employeeDataString = document.getElementById("employeeTableName").dataset.employeeData;
+  const employeeData = JSON.parse(employeeDataString);
+
+  employeeData.sort((a, b) => a.name.localeCompare(b.name));
+
+  populateEmployeeTable(employeeData);
+}
+
+function sortTableByRole() {
+  const employeeDataString = document.getElementById("employeeTableRole").dataset.employeeData;
+  const employeeData = JSON.parse(employeeDataString);
+
+  employeeData.sort((a, b) => a.role_name.localeCompare(b.role_name));
+
+  populateEmployeeTable(employeeData);
+}
+
+function sortTableByStatus() {
+  const employeeDataString = document.getElementById("employeeTableStatus").dataset.employeeData;
+  const employeeData = JSON.parse(employeeDataString);
+
+  employeeData.sort((a, b) => a.status.localeCompare(b.status));
+
+  populateEmployeeTable(employeeData);
 }
 
 function populateVacationTable(vacationData) {
@@ -121,7 +157,7 @@ function addNewEmployee() {
 
       <div class="buttons">
         <button type="button" onclick="saveEmployee('create')">Opret</button>
-        <button type="button" onclick="cancelForm()">Annuller</button>
+        <button type="button" onclick="refreshEmployeeList()">Annuller</button>
       </div>
     </form>`;
 

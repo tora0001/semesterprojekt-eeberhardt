@@ -88,8 +88,8 @@ app.post("/employee", (req, res) => {
 app.put("/employee/:employee_id", (req, res) => {
   const id = req.params.employee_id;
   const employee = req.body;
-  const query = "UPDATE employee SET name=?, role_id=?, ferieDage=?, status_id=? WHERE employee_id=?;";
-  const values = [employee.name, employee.role_id, employee.ferieDage, employee.status_id, id];
+  const query = "UPDATE employee SET name=?, role_id=?, vacation_days=?, status_id=? WHERE employee_id=?;";
+  const values = [employee.name, employee.role_id, employee.vacation_days, employee.status_id, id];
 
   connection.query(query, values, (error, results) => {
     if (error) {
