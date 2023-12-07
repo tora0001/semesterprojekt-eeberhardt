@@ -203,6 +203,9 @@ function editEmployeeClicked(employee) {
 }
 
 function editEmployee(employeeId) {
+   console.log(employees);
+   const foundEmployee = employees.find((employee) => employee.id === employeeId);
+   console.log(foundEmployee);
    const updateForm = /*HTML*/ `
     <form id="updateEmployeeForm">
       <label for="employeeName">Navn:</label>
