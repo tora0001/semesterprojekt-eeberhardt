@@ -39,9 +39,9 @@ function populateEmployeeTable(employeeData) {
       <thead>
         <tr>
           <th>Medarbejder ID</th>
-          <th class="employeeTableName" onclick="sortTableByName()">Navn</th>
-          <th class="employeeTableRole" onclick="sortTableByRole()">Stilling</th>
-          <th class="employeeTableStatus" onclick="sortTableByStatus()">Status</th>
+          <th id="employeeTableName" onclick="sortTableByName()">Navn</th>
+          <th id="employeeTableRole" onclick="sortTableByRole()">Stilling</th>
+          <th id="employeeTableStatus" onclick="sortTableByStatus()">Status</th>
           <th>Handlinger</th>
         </tr>
       </thead>
@@ -67,7 +67,7 @@ function populateEmployeeTable(employeeData) {
     <button onclick="addNewEmployee()">Opret Ny Medarbejder</button>
     </div>`;
 
-  const employeeTableNameHeader = document.getElementsByClassName("employeeTableName");
+  const employeeTableNameHeader = document.getElementById("employeeTableName");
   employeeTableNameHeader.dataset.employeeData = JSON.stringify(employeeData);
 
   const employeeTableRoleHeader = document.getElementById("employeeTableRole");
@@ -76,8 +76,6 @@ function populateEmployeeTable(employeeData) {
   const employeeTableStatusHeader = document.getElementById("employeeTableStatus");
   employeeTableStatusHeader.dataset.employeeData = JSON.stringify(employeeData);
 }
-
-//table sort functions
 
 function sortTableByName() {
   const employeeDataString = document.getElementById("employeeTableName").dataset.employeeData;
