@@ -209,7 +209,7 @@ function editEmployee(employeeId) {
    const updateForm = /*HTML*/ `
     <form id="updateEmployeeForm">
       <label for="employeeName">Navn:</label>
-      <input type="text" id="employeeNameUpdate" name="employeeName" required>
+      <input type="text" id="employeeNameUpdate" name="employeeName" required value="${foundEmployee.name}">
 
       <label for="employeeRole">Stilling:</label>
       <select type="text" id="employeeRoleUpdate" name="employeeRole" required>
