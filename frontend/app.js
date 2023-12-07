@@ -194,16 +194,19 @@ function saveEmployee() {
 }
 
 function editEmployeeClicked(employee) {
+   console.log(employee);
    const update = document.querySelector("#updateEmployeeForm");
 
    update.employeeNameUpdate.value = employee.employeeName;
    update.employeeRoleUpdate.value = employee.employeeRole;
    update.vacationsDaysUpdate.value = employee.vacationDays;
-
-   update.setAttribute("data-id", employee.id);
 }
 
 function editEmployee(employeeId) {
+   console.log(employees);
+   const employeeById = employees.find((employee) => employee.id === employeeId);
+   console.log(employeeById);
+
    const updateForm = /*HTML*/ `
     <form id="updateEmployeeForm">
       <label for="employeeName">Navn:</label>
@@ -226,6 +229,8 @@ function editEmployee(employeeId) {
     </form>`;
 
    mainContent.innerHTML = updateForm;
+
+   editEmployeeClicked(employeeById);
 
    const confirmBtn = document.getElementById("confirmBtn");
    const cancelBtn = document.getElementById("cancelBtn");
@@ -293,6 +298,7 @@ function deleteEmployee(employeeId) {
    confirmBtn.onclick = function () {
       closeModal();
       performDeleteEmployee(employeeId);
+      refreshEmployeeList();
    };
 
    cancelBtn.onclick = function () {
@@ -352,6 +358,10 @@ function addNewVacation() {
          mainContent.innerHTML = formHTML;
       });
 }
+
+function editVacation() {}
+
+function performEditVacation() {}
 
 function refreshEmployeeList() {
    fetch(`${endpoint}/employees`)
