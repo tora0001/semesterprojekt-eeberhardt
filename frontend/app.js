@@ -197,14 +197,14 @@ function editEmployeeClicked(employee) {
    console.log(employee);
    const update = document.querySelector("#updateEmployeeForm");
 
-   update.employeeNameUpdate.value = employee.employeeName;
-   update.employeeRoleUpdate.value = employee.employeeRole;
-   update.vacationsDaysUpdate.value = employee.vacationDays;
+   update.employeeNameUpdate.value = employee.name;
+   update.employeeRoleUpdate.value = employee.role_name;
+   //    update.vacationsDaysUpdate.value = employee.vacationDays;
+   console.log(employee.role_name);
 }
 
 function editEmployee(employeeId) {
-   console.log(employees);
-   const foundEmployee = employees.find((employee) => employee.id === employeeId);
+   const foundEmployee = employees.find((employee) => employee.employee_id === employeeId);
    console.log(foundEmployee);
    const updateForm = /*HTML*/ `
     <form id="updateEmployeeForm">
@@ -213,9 +213,9 @@ function editEmployee(employeeId) {
 
       <label for="employeeRole">Stilling:</label>
       <select type="text" id="employeeRoleUpdate" name="employeeRole" required>
-        <option value = "1">Manager</option>
-        <option value = "2">Medarbejder</option>
-        <option value = "3">Praktikant</option>
+        <option value = "Manager">Manager</option>
+        <option value = "Employee">Medarbejder</option>
+        <option value = "Intern">Praktikant</option>
       </select>
 
       <label for="vacationDays">Feriedage Til Rådighed:</label>
@@ -228,6 +228,8 @@ function editEmployee(employeeId) {
     </form>`;
 
    mainContent.innerHTML = updateForm;
+
+   editEmployeeClicked(foundEmployee);
 
    const confirmBtn = document.getElementById("confirmBtn");
    const cancelBtn = document.getElementById("cancelBtn");
