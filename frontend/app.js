@@ -16,6 +16,9 @@ window.addEventListener("load", start);
 function start() {
    console.log("Running");
 
+   // Fetch roles and update the roleList
+   refreshRoleList();
+
    // Initial content to show
    refreshEmployeeList();
 }
@@ -149,16 +152,14 @@ function addNewEmployee() {
 
       <label for="employeeRole">Stilling:</label>
       <select type="text" id="employeeRole" name="employeeRole" required>
-        <option value = "1">Manager</option>
-        <option value = "2">Medarbejder</option>
-        <option value = "3">Praktikant</option>
+      ${roles.map(element => `<option value="${element.role_id}">${element.role_name}</option>`).join('')}
       </select>
 
       <label for="vacationDays">Feriedage Til Rådighed:</label>
       <input type="text" id="vacationDays" name="vacationDays" required>
 
       <div class="buttons">
-        <button type="button" onclick="saveEmployee('create')">Opret</button>
+        <button type="button" onclick="createEmployee('create')">Opret</button>
         <button type="button" onclick="refreshEmployeeList()">Annuller</button>
       </div>
     </form>`;
@@ -166,7 +167,7 @@ function addNewEmployee() {
    mainContent.innerHTML = formHTML;
 }
 
-function saveEmployee() {
+function createEmployee() {
    const employeeName = document.getElementById("employeeName").value;
    const employeeRole = document.getElementById("employeeRole").value;
    const vacationDays = document.getElementById("vacationDays").value;
@@ -195,15 +196,6 @@ function saveEmployee() {
       });
 }
 
-function editEmployeeClicked(employee) {
-   console.log(employee);
-   const update = document.querySelector("#updateEmployeeForm");
-
-   update.employeeNameUpdate.value = employee.name;
-   update.employeeRoleUpdate.value = employee.role_name;
-   update.vacationsDaysUpdate.value = employee.vacation_days;
-}
-
 function editEmployee(employeeId) {
    const foundEmployee = employees.find((employee) => employee.employee_id === employeeId);
    const updateForm = /*HTML*/ `
@@ -211,35 +203,33 @@ function editEmployee(employeeId) {
       <label for="employeeName">Navn:</label>
       <input type="text" id="employeeNameUpdate" name="employeeName" required value="${foundEmployee.name}">
 
-      <label for="employeeRole">Stilling:</label>
+      <label for="employeeRoleUpdate">Stilling:</label>
       <select type="text" id="employeeRoleUpdate" name="employeeRole" required>
-        <option value = "Manager">Manager</option>
-        <option value = "Employee">Medarbejder</option>
-        <option value = "Intern">Praktikant</option>
+         ${roles.map(element => `<option value="${element.role_id}" ${element.role_id === foundEmployee.role_id ? 'selected' : ''}>${element.role_name}</option>`).join('')}
       </select>
 
       <label for="vacationDays">Feriedage Til Rådighed:</label>
-      <input type="text" id="vacationDaysUpdate" name="vacationDays" required>
+      <input type="text" id="vacationDaysUpdate" name="vacationDays" required value="${foundEmployee.vacation_days}">
 
       <div class="buttons">
-        <button type="button" id="confirmBtn">Opret</button>
+        <button type="button" id="confirmBtn">Gem</button>
         <button type="button" id="cancelBtn">Annuller</button>
       </div>
     </form>`;
 
    mainContent.innerHTML = updateForm;
 
-   editEmployeeClicked(foundEmployee);
-
    const confirmBtn = document.getElementById("confirmBtn");
    const cancelBtn = document.getElementById("cancelBtn");
 
    confirmBtn.onclick = function () {
+      console.log("confirmBtn clicked");
       performEditEmployee(employeeId);
       refreshEmployeeList();
    };
 
    cancelBtn.onclick = function () {
+      console.log("cancelBtn clicked");
       refreshEmployeeList();
    };
 }
@@ -413,7 +403,6 @@ function refreshRoleList() {
         .then((data) => {
           roles = data;
         });
-        updateRoleList();
 }
 
 function refreshEmployeeList() {
@@ -439,10 +428,3 @@ function formatDate(inputDate) {
    const formattedDate = dateObject.toISOString().split("T")[0];
    return formattedDate;
 }
-
-function updateRoleList () {
-  roles.forEach(element => {
-    roleList.push({value: element.role_id, label: element.role_name});
-  });
-}
-
