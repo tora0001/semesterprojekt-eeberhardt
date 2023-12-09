@@ -1,6 +1,8 @@
 "use strict";
 let employees = [];
 let vacations = [];
+let roles = [];
+let roleList = [];
 
 //brug dette endpoint for at teste med azure
 // const endpoint = "https://semesterprojekt-eeberhardt.azurewebsites.net";
@@ -12,28 +14,31 @@ const endpoint = "http://localhost:4000";
 window.addEventListener("load", start);
 
 function start() {
-  console.log("Running");
+   console.log("Running");
 
-  // Initial content to show
-  refreshEmployeeList();
+   // Fetch roles and update the roleList
+   refreshRoleList();
+
+   // Initial content to show
+   refreshEmployeeList();
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  const employeePage = document.getElementById("employeePage");
-  const vacationPage = document.getElementById("vacationPage");
-  const mainContent = document.getElementById("mainContent");
+   const employeePage = document.getElementById("employeePage");
+   const vacationPage = document.getElementById("vacationPage");
+   const mainContent = document.getElementById("mainContent");
 
-  employeePage.addEventListener("click", function () {
-    refreshEmployeeList();
-  });
+   employeePage.addEventListener("click", function () {
+      refreshEmployeeList();
+   });
 
-  vacationPage.addEventListener("click", function () {
-    refreshVacationList();
-  });
+   vacationPage.addEventListener("click", function () {
+      refreshVacationList();
+   });
 });
 
 function populateEmployeeTable(employeeData) {
-  mainContent.innerHTML = /*HTML*/ `
+   mainContent.innerHTML = /*HTML*/ `
     <h2>Ansat Oversigt</h2>
     <table id="employeeTable">
       <thead>
@@ -47,8 +52,8 @@ function populateEmployeeTable(employeeData) {
       </thead>
       <tbody>
         ${employeeData
-          .map(
-            (employee) => /*HTML*/ `
+           .map(
+              (employee) => /*HTML*/ `
                 <tr>
                     <td>${employee.employee_id}</td>
                     <td>${employee.name}</td>
@@ -59,53 +64,53 @@ function populateEmployeeTable(employeeData) {
                       <button onclick="deleteEmployee(${employee.employee_id})">Slet</button>
                     </td>
                 </tr>`
-          )
-          .join("")}
+           )
+           .join("")}
       </tbody>
     </table>
     <div class="buttons">
     <button onclick="addNewEmployee()">Opret Ny Medarbejder</button>
     </div>`;
 
-  const employeeTableNameHeader = document.getElementById("employeeTableName");
-  employeeTableNameHeader.dataset.employeeData = JSON.stringify(employeeData);
+   const employeeTableNameHeader = document.getElementById("employeeTableName");
+   employeeTableNameHeader.dataset.employeeData = JSON.stringify(employeeData);
 
-  const employeeTableRoleHeader = document.getElementById("employeeTableRole");
-  employeeTableRoleHeader.dataset.employeeData = JSON.stringify(employeeData);
+   const employeeTableRoleHeader = document.getElementById("employeeTableRole");
+   employeeTableRoleHeader.dataset.employeeData = JSON.stringify(employeeData);
 
-  const employeeTableStatusHeader = document.getElementById("employeeTableStatus");
-  employeeTableStatusHeader.dataset.employeeData = JSON.stringify(employeeData);
+   const employeeTableStatusHeader = document.getElementById("employeeTableStatus");
+   employeeTableStatusHeader.dataset.employeeData = JSON.stringify(employeeData);
 }
 
 function sortTableByName() {
-  const employeeDataString = document.getElementById("employeeTableName").dataset.employeeData;
-  const employeeData = JSON.parse(employeeDataString);
+   const employeeDataString = document.getElementById("employeeTableName").dataset.employeeData;
+   const employeeData = JSON.parse(employeeDataString);
 
-  employeeData.sort((a, b) => a.name.localeCompare(b.name));
+   employeeData.sort((a, b) => a.name.localeCompare(b.name));
 
-  populateEmployeeTable(employeeData);
+   populateEmployeeTable(employeeData);
 }
 
 function sortTableByRole() {
-  const employeeDataString = document.getElementById("employeeTableRole").dataset.employeeData;
-  const employeeData = JSON.parse(employeeDataString);
+   const employeeDataString = document.getElementById("employeeTableRole").dataset.employeeData;
+   const employeeData = JSON.parse(employeeDataString);
 
-  employeeData.sort((a, b) => a.role_name.localeCompare(b.role_name));
+   employeeData.sort((a, b) => a.role_name.localeCompare(b.role_name));
 
-  populateEmployeeTable(employeeData);
+   populateEmployeeTable(employeeData);
 }
 
 function sortTableByStatus() {
-  const employeeDataString = document.getElementById("employeeTableStatus").dataset.employeeData;
-  const employeeData = JSON.parse(employeeDataString);
+   const employeeDataString = document.getElementById("employeeTableStatus").dataset.employeeData;
+   const employeeData = JSON.parse(employeeDataString);
 
-  employeeData.sort((a, b) => a.status.localeCompare(b.status));
+   employeeData.sort((a, b) => a.status.localeCompare(b.status));
 
-  populateEmployeeTable(employeeData);
+   populateEmployeeTable(employeeData);
 }
 
 function populateVacationTable(vacationData) {
-  mainContent.innerHTML = /*HTML*/ `
+   mainContent.innerHTML = /*HTML*/ `
     <h2>Ferie Oversigt</h2>
     <table id="vacationTable">
       <thead>
@@ -119,8 +124,8 @@ function populateVacationTable(vacationData) {
       <tbody>
         <!-- Loop through vacationData to populate rows -->
         ${vacationData
-          .map(
-            (vacation) => /*HTML*/ `
+           .map(
+              (vacation) => /*HTML*/ `
                 <tr>
                     <td>${vacation.name}</td>
                     <td>${formatDate(vacation.startDate)}</td>
@@ -130,8 +135,8 @@ function populateVacationTable(vacationData) {
                       <button onclick="deleteVacation(${vacation.vacation_id})">Slet</button>
                     </td>
                 </tr>`
-          )
-          .join("")}
+           )
+           .join("")}
       </tbody>
     </table>
     <div class="buttons">
@@ -140,61 +145,127 @@ function populateVacationTable(vacationData) {
 }
 
 function addNewEmployee() {
-  const formHTML = /*HTML*/ `
+   const formHTML = /*HTML*/ `
     <form id="employeeForm">
       <label for="employeeName">Navn:</label>
       <input type="text" id="employeeName" name="employeeName" required>
 
       <label for="employeeRole">Stilling:</label>
       <select type="text" id="employeeRole" name="employeeRole" required>
-        <option value = "1">Manager</option>
-        <option value = "2">Medarbejder</option>
-        <option value = "3">Praktikant</option>
+      ${roles.map(element => `<option value="${element.role_id}">${element.role_name}</option>`).join('')}
       </select>
 
       <label for="vacationDays">Feriedage Til Rådighed:</label>
       <input type="text" id="vacationDays" name="vacationDays" required>
 
       <div class="buttons">
-        <button type="button" onclick="saveEmployee('create')">Opret</button>
+        <button type="button" onclick="createEmployee('create')">Opret</button>
         <button type="button" onclick="refreshEmployeeList()">Annuller</button>
       </div>
     </form>`;
 
-  mainContent.innerHTML = formHTML;
+   mainContent.innerHTML = formHTML;
 }
 
-function saveEmployee() {
-  const employeeName = document.getElementById("employeeName").value;
-  const employeeRole = document.getElementById("employeeRole").value;
-  const vacationDays = document.getElementById("vacationDays").value;
-  const employeeStatus = 1;
+function createEmployee() {
+   const employeeName = document.getElementById("employeeName").value;
+   const employeeRole = document.getElementById("employeeRole").value;
+   const vacationDays = document.getElementById("vacationDays").value;
+   const employeeStatus = 1;
 
-  const employeeData = {
-    name: employeeName,
-    role_id: employeeRole,
-    vacation_days: vacationDays,
-    status_id: employeeStatus,
-  };
+   const employeeData = {
+      name: employeeName,
+      role_id: employeeRole,
+      vacation_days: vacationDays,
+      status_id: employeeStatus,
+   };
 
-  const url = `${endpoint}/employee`;
-  const method = "POST";
+   const url = `${endpoint}/employee`;
+   const method = "POST";
 
-  fetch(url, {
-    method: method,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(employeeData),
-  })
-    .then((response) => response.json())
-    .then(() => {
+   fetch(url, {
+      method: method,
+      headers: {
+         "Content-Type": "application/json",
+      },
+      body: JSON.stringify(employeeData),
+   })
+      .then((response) => response.json())
+      .then(() => {
+         refreshEmployeeList();
+      });
+}
+
+function editEmployee(employeeId) {
+   const foundEmployee = employees.find((employee) => employee.employee_id === employeeId);
+   const updateForm = /*HTML*/ `
+    <form id="updateEmployeeForm">
+      <label for="employeeName">Navn:</label>
+      <input type="text" id="employeeNameUpdate" name="employeeName" required value="${foundEmployee.name}">
+
+      <label for="employeeRoleUpdate">Stilling:</label>
+      <select type="text" id="employeeRoleUpdate" name="employeeRole" required>
+         ${roles.map(element => `<option value="${element.role_id}" ${element.role_id === foundEmployee.role_id ? 'selected' : ''}>${element.role_name}</option>`).join('')}
+      </select>
+
+      <label for="vacationDays">Feriedage Til Rådighed:</label>
+      <input type="text" id="vacationDaysUpdate" name="vacationDays" required value="${foundEmployee.vacation_days}">
+
+      <div class="buttons">
+        <button type="button" id="confirmBtn">Gem</button>
+        <button type="button" id="cancelBtn">Annuller</button>
+      </div>
+    </form>`;
+
+   mainContent.innerHTML = updateForm;
+
+   const confirmBtn = document.getElementById("confirmBtn");
+   const cancelBtn = document.getElementById("cancelBtn");
+
+   confirmBtn.onclick = function () {
+      console.log("confirmBtn clicked");
+      performEditEmployee(employeeId);
       refreshEmployeeList();
-    });
+   };
+
+   cancelBtn.onclick = function () {
+      console.log("cancelBtn clicked");
+      refreshEmployeeList();
+   };
+}
+
+function performEditEmployee(employeeId) {
+
+   const employeeName = document.getElementById("employeeNameUpdate").value;
+   const employeeRole = document.getElementById("employeeRoleUpdate").value;
+   const vacationDays = document.getElementById("vacationDaysUpdate").value;
+   const employeeStatus = 1;
+
+   const employeeData = {
+      name: employeeName,
+      role_id: employeeRole,
+      vacation_days: vacationDays,
+      status_id: employeeStatus,
+   };
+
+   const url = `${endpoint}/employee/${employeeId}`;
+   const method = "PUT";
+
+   fetch(url, {
+      method: method,
+      headers: {
+         "Content-Type": "application/json",
+      },
+      body: JSON.stringify(employeeData),
+   })
+      .then((response) => response.json())
+      .then(() => {
+         refreshEmployeeList();
+      });
 }
 
 function deleteEmployee(employeeId) {
-  const confirmationModalHTML = /*HTML*/ `
+   const confirmationModalHTML = /*HTML*/ `
     <div id="confirmationModal" class="modal">
       <div id="modalContent" class="modal-content">
         Er du sikker på at du vil fjerne denne medarbejder?
@@ -206,55 +277,55 @@ function deleteEmployee(employeeId) {
     </div>
   `;
 
-  mainContent.innerHTML = confirmationModalHTML;
+   mainContent.innerHTML = confirmationModalHTML;
 
-  const modal = document.getElementById("confirmationModal");
-  const confirmBtn = document.getElementById("confirmBtn");
-  const cancelBtn = document.getElementById("cancelBtn");
+   const modal = document.getElementById("confirmationModal");
+   const confirmBtn = document.getElementById("confirmBtn");
+   const cancelBtn = document.getElementById("cancelBtn");
 
-  modal.style.display = "block";
+   modal.style.display = "block";
 
-  confirmBtn.onclick = function () {
-    closeModal();
-    performDeleteEmployee(employeeId);
-  };
+   confirmBtn.onclick = function () {
+      closeModal();
+      performDeleteEmployee(employeeId);
+   };
 
-  cancelBtn.onclick = function () {
-    closeModal();
-    refreshEmployeeList();
-  };
+   cancelBtn.onclick = function () {
+      closeModal();
+      refreshEmployeeList();
+   };
 
-  function closeModal() {
-    modal.style.display = "none";
-  }
+   function closeModal() {
+      modal.style.display = "none";
+   }
 }
 
 function performDeleteEmployee(employeeId) {
-  const url = `${endpoint}/employee/${employeeId}`;
-  const method = "DELETE";
+   const url = `${endpoint}/employee/${employeeId}`;
+   const method = "DELETE";
 
-  fetch(url, {
-    method: method,
-  })
-    .then((response) => response.json())
-    .then(() => {
-      refreshEmployeeList();
-    });
+   fetch(url, {
+      method: method,
+   })
+      .then((response) => response.json())
+      .then(() => {
+         refreshEmployeeList();
+      });
 }
 
 function addNewVacation() {
-  fetch(`${endpoint}/employees`)
-    .then((response) => response.json())
-    .then((employeeData) => {
-      const employeeSelectOptions = employeeData
-        .map(
-          (employee) => /*HTML*/ `
+   fetch(`${endpoint}/employees`)
+      .then((response) => response.json())
+      .then((employeeData) => {
+         const employeeSelectOptions = employeeData
+            .map(
+               (employee) => /*HTML*/ `
         <option value="${employee.employee_id}">${employee.name}</option>
       `
-        )
-        .join("");
+            )
+            .join("");
 
-      const formHTML = /*HTML*/ `
+         const formHTML = /*HTML*/ `
     <form id="vacationForm">
       <label for="employeeSelect">Employee:</label>
       <select id="employeeSelect" name="employeeSelect">
@@ -273,8 +344,65 @@ function addNewVacation() {
       </div>
     </form>`;
 
-      mainContent.innerHTML = formHTML;
-    });
+         mainContent.innerHTML = formHTML;
+      });
+}
+function editVacation() {}
+
+function performEditVacation() {}
+
+function deleteVacation(vacationId) {
+   const confirmationModalHTML = /*HTML*/ `
+    <div id="confirmationModal" class="modal">
+      <div id="modalContent" class="modal-content">
+        Er du sikker på at du vil fjerne denne ferie?
+      </div>
+      <div class="modal-buttons">
+        <button id="confirmBtn" class="buttons">Ja</button>
+        <button id="cancelBtn" class="buttons">Nej</button>
+      </div>
+    </div>
+  `;
+
+   mainContent.innerHTML = confirmationModalHTML;
+
+   const modal = document.getElementById("confirmationModal");
+   const confirmBtn = document.getElementById("confirmBtn");
+   const cancelBtn = document.getElementById("cancelBtn");
+
+   modal.style.display = "block";
+
+   confirmBtn.onclick = function () {
+      closeModal();
+      performDeleteVacation(vacationId);
+   };
+   cancelBtn.onclick = function () {
+      closeModal();
+      refreshVacationList();
+   };
+   function closeModal() {
+      modal.style.display = "none";
+   }
+}
+
+function performDeleteVacation(vacationId) {
+   const url = `${endpoint}/vacation/${vacationId}`;
+   const method = "DELETE";
+
+   fetch(url, {
+      method: method,
+   })
+      .then((response) => response.json())
+      .then(() => {
+         refreshVacationList();
+      });
+}
+function refreshRoleList() {
+    fetch(`${endpoint}/roles`)
+        .then((response) => response.json())
+        .then((data) => {
+          roles = data;
+        });
 }
 
 function saveVacation() {
@@ -369,25 +497,25 @@ function editVacation(vacationId) {
 }
 
 function refreshEmployeeList() {
-  fetch(`${endpoint}/employees`)
-    .then((response) => response.json())
-    .then((data) => {
-      employees = data;
-      populateEmployeeTable(employees);
-    });
+   fetch(`${endpoint}/employees`)
+      .then((response) => response.json())
+      .then((data) => {
+         employees = data;
+         populateEmployeeTable(employees);
+      });
 }
 
 function refreshVacationList() {
-  fetch(`${endpoint}/vacations`)
-    .then((response) => response.json())
-    .then((data) => {
-      vacations = data;
-      populateVacationTable(vacations);
-    });
+   fetch(`${endpoint}/vacations`)
+      .then((response) => response.json())
+      .then((data) => {
+         vacations = data;
+         populateVacationTable(vacations);
+      });
 }
 
 function formatDate(inputDate) {
-  const dateObject = new Date(inputDate);
-  const formattedDate = dateObject.toISOString().split("T")[0];
-  return formattedDate;
+   const dateObject = new Date(inputDate);
+   const formattedDate = dateObject.toISOString().split("T")[0];
+   return formattedDate;
 }
