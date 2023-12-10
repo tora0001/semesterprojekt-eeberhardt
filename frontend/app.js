@@ -327,17 +327,23 @@ function addNewVacation() {
 
          const formHTML = /*HTML*/ `
     <form id="vacationForm">
+      <div>
       <label for="employeeSelect">Employee:</label>
       <select id="employeeSelect" name="employeeSelect">
         ${employeeSelectOptions}
           </select>
-
+      </div>
+      <br>
+      <div>
       <label for="startDate">Start Date:</label>
       <input type="date" id="startDate" name="startDate" required>
-
+      </div>
+      <br>
+      <div>
       <label for="endDate">End Date:</label>
       <input type="date" id="endDate" name="endDate" required>
-
+      </div>
+      
       <div class="buttons">
         <button type="button" onclick="saveVacation('create')">Save</button>
         <button type="button" onclick="cancelForm()">Cancel</button>
@@ -473,26 +479,32 @@ function editVacationById(vacationId) {
   fetch(`${endpoint}/vacation/${vacationId}`)
     .then((response) => response.json())
     .then((vacationData) => {
-      console.lo
       const formHTML = /*HTML*/ `
-    <form id="vacationForm">
-      <label for="employeeSelect">Employee: ${vacationData[0].name}</label>
-
-      <label for="startDate">Start Date:</label>
-      <input type="date" id="startDate" name="startDate" value="${formatDate(vacationData[0].startDate)}" required>
-
-      <label for="endDate">End Date:</label>
-      <input type="date" id="endDate" name="endDate" value="${formatDate(vacationData[0].endDate)}" required>
-
+      <form id="vacationForm">
+      <div>
+        <label for="employeeSelect">Employee: ${vacationData[0].name}</label>
+      </div>
+      <br>
+      <div>
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate" value="${formatDate(vacationData[0].startDate)}" required>
+      </div>
+      <br>
+      <div>
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" name="endDate" value="${formatDate(vacationData[0].endDate)}" required>
+      </div>
+      <br>
       <div class="buttons">
         <button type="button" onclick="saveVacation(${vacationId}, 'edit')">Save</button>
         <button type="button" onclick="refreshVacationList()">Cancel</button>
       </div>
-    </form>`;
+    </form>
+    `;
       mainContent.innerHTML = formHTML;
     });
 }
-ref
+
 function refreshEmployeeList() {
    fetch(`${endpoint}/employees`)
       .then((response) => response.json())
@@ -510,8 +522,6 @@ function refreshVacationList() {
          populateVacationTable(vacations);
       });
 }
-
-
 
 function formatDate(inputDate) {
    const dateObject = new Date(inputDate);
