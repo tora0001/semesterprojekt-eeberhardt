@@ -34,18 +34,18 @@ app.use(employeeRoutes);
 app.use(vacationRoutes);
 app.use(roleRoutes);
 
-// get employee role
-app.get("/employeerole/:employee_id", (req, res) => {
-  const id = req.params.employee_id;
-  const query = "SELECT employee.employee_id, employee.name, roles.role_name FROM employee INNER JOIN roles ON employee.status_id = roles.role_id;";
-  const values = [id];
+// // get employee role
+// app.get("/employeerole/:employee_id", (req, res) => {
+//   const id = req.params.employee_id;
+//   const query = "SELECT employee.employee_id, employee.name, roles.role_name FROM employee INNER JOIN roles ON employee.status_id = roles.role_id;";
+//   const values = [id];
 
-  connection.query(query, values, (error, results) => {
-    if (error) {
-      console.log(error);
-    } else {
-      res.json(results);
-    }
-  });
-});
+//   connection.query(query, values, (error, results) => {
+//     if (error) {
+//       console.log(error);
+//     } else {
+//       res.json(results);
+//     }
+//   });
+// });
 
