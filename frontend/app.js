@@ -333,7 +333,7 @@ function addNewVacation() {
         ${employeeSelectOptions}
           </select>
       </div>
-      <br>
+      
       <div>
       <label for="startDate">Start Date:</label>
       <input type="date" id="startDate" name="startDate" required>
