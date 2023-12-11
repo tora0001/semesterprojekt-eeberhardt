@@ -1,6 +1,8 @@
 "use strict";
 let employees = [];
 let vacations = [];
+let roles = [];
+let roleList = [];
 
 //brug dette endpoint for at teste med azure
 // const endpoint = "https://semesterprojekt-eeberhardt.azurewebsites.net";
@@ -13,6 +15,9 @@ window.addEventListener("load", start);
 
 function start() {
    console.log("Running");
+
+   // Fetch roles and update the roleList
+   refreshRoleList();
 
    // Initial content to show
    refreshEmployeeList();
@@ -147,16 +152,14 @@ function addNewEmployee() {
 
       <label for="employeeRole">Stilling:</label>
       <select type="text" id="employeeRole" name="employeeRole" required>
-        <option value = "1">Manager</option>
-        <option value = "2">Medarbejder</option>
-        <option value = "3">Praktikant</option>
+      ${roles.map((element) => `<option value="${element.role_id}">${element.role_name}</option>`).join("")}
       </select>
 
       <label for="vacationDays">Feriedage Til Rådighed:</label>
       <input type="text" id="vacationDays" name="vacationDays" required>
 
       <div class="buttons">
-        <button type="button" onclick="saveEmployee('create')">Opret</button>
+        <button type="button" onclick="createEmployee('create')">Opret</button>
         <button type="button" onclick="refreshEmployeeList()">Annuller</button>
       </div>
     </form>`;
@@ -164,7 +167,7 @@ function addNewEmployee() {
    mainContent.innerHTML = formHTML;
 }
 
-function saveEmployee() {
+function createEmployee() {
    const employeeName = document.getElementById("employeeName").value;
    const employeeRole = document.getElementById("employeeRole").value;
    const vacationDays = document.getElementById("vacationDays").value;
@@ -207,21 +210,20 @@ function editEmployeeClicked(employee) {
 
 function editEmployee(employeeId) {
    const foundEmployee = employees.find((employee) => employee.employee_id === employeeId);
-   console.log(foundEmployee);
    const updateForm = /*HTML*/ `
     <form id="updateEmployeeForm">
       <label for="employeeName">Navn:</label>
       <input type="text" id="employeeNameUpdate" name="employeeName" required>
 
-      <label for="employeeRole">Stilling:</label>
+      <label for="employeeRoleUpdate">Stilling:</label>
       <select type="text" id="employeeRoleUpdate" name="employeeRole" required>
-        <option value = "1">Manager</option>
-        <option value = "2">Medarbejder</option>
-        <option value = "3">Praktikant</option>
+        <option value = "Manager">Manager</option>
+        <option value = "Employee">Medarbejder</option>
+        <option value = "Intern">Praktikant</option>
       </select>
 
       <label for="vacationDays">Feriedage Til Rådighed:</label>
-      <input type="text" id="vacationDaysUpdate" name="vacationDays" required>
+      <input type="text" id="vacationDaysUpdate" name="vacationDays" required value="${foundEmployee.vacation_days}">
 
       <div class="buttons">
         <button type="button" id="confirmBtn">Gem</button>
@@ -231,17 +233,17 @@ function editEmployee(employeeId) {
 
    mainContent.innerHTML = updateForm;
 
-   editEmployeeClicked(foundEmployee);
-
    const confirmBtn = document.getElementById("confirmBtn");
    const cancelBtn = document.getElementById("cancelBtn");
 
    confirmBtn.onclick = function () {
+      console.log("confirmBtn clicked");
       performEditEmployee(employeeId);
       refreshEmployeeList();
    };
 
    cancelBtn.onclick = function () {
+      console.log("cancelBtn clicked");
       refreshEmployeeList();
    };
 }
@@ -350,14 +352,41 @@ function addNewVacation() {
       <input type="date" id="endDate" name="endDate" required>
 
       <div class="buttons">
-        <button type="button" onclick="saveVacation('create')">Save</button>
-        <button type="button" onclick="cancelForm()">Cancel</button>
+        <button type="button" onclick="saveVacation('create')">Gem</button>
+        <button type="button" onclick="refreshVacationList()">Annuller</button>
       </div>
     </form>`;
-
          mainContent.innerHTML = formHTML;
       });
 }
+
+function saveVacation() {
+   const employeeId = document.getElementById("employeeSelect").value;
+   const startDate = document.getElementById("startDate").value;
+   const endDate = document.getElementById("endDate").value;
+
+   const vacationData = {
+      employee_id: employeeId,
+      startDate: startDate,
+      endDate: endDate,
+   };
+
+   const url = `${endpoint}/vacation`;
+   const method = "POST";
+
+   fetch(url, {
+      method: method,
+      headers: {
+         "Content-Type": "application/json",
+      },
+      body: JSON.stringify(vacationData),
+   })
+      .then((response) => response.json())
+      .then(() => {
+         refreshVacationList();
+      });
+}
+
 function editVacation() {}
 
 function performEditVacation() {}
@@ -397,7 +426,6 @@ function deleteVacation(vacationId) {
 }
 
 function performDeleteVacation(vacationId) {
-   console.log(vacationId);
    const url = `${endpoint}/vacation/${vacationId}`;
    const method = "DELETE";
 
@@ -407,6 +435,13 @@ function performDeleteVacation(vacationId) {
       .then((response) => response.json())
       .then(() => {
          refreshVacationList();
+      });
+}
+function refreshRoleList() {
+   fetch(`${endpoint}/roles`)
+      .then((response) => response.json())
+      .then((data) => {
+         roles = data;
       });
 }
 

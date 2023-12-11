@@ -40,7 +40,7 @@ app.get("/employee", (req, res) => {
 });
 
 app.get("/employees", (req, res) => {
-  const query = "SELECT name, e.employee_id, e.vacation_days, r.role_name, s.status FROM employee e INNER JOIN roles r ON e.role_id = r.role_id INNER JOIN status s ON e.status_id = s.status_id;";
+  const query = "SELECT name, e.employee_id, e.vacation_days, e.role_id, r.role_name, s.status FROM employee e INNER JOIN roles r ON e.role_id = r.role_id INNER JOIN status s ON e.status_id = s.status_id;";
 
   connection.query(query, (error, results) => {
     if (error) {
@@ -211,6 +211,19 @@ app.get("/employeerole/:employee_id", (req, res) => {
   const values = [id];
 
   connection.query(query, values, (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+// get roles 
+app.get("/roles", (req, res) => {
+  const query = "SELECT * FROM roles;";
+
+  connection.query(query, (error, results) => {
     if (error) {
       console.log(error);
     } else {
