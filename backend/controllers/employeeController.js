@@ -117,7 +117,7 @@ class EmployeeController {
 
   async updateEmployeeStatusAsync(employeeId, newStatus) {
     return new Promise((resolve, reject) => {
-        const query = 'UPDATE employee SET status_id =  WHERE employee_id = ?';
+        const query = 'UPDATE employee SET status_id = ? WHERE employee_id = ?';
         const values = [newStatus, employeeId];
 
         connection.query(query, values, (error, results) => {

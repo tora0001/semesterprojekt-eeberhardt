@@ -9,6 +9,8 @@ class AutoUpdater {
             const allVacations = await VacationController.getAllVacationsForAutoUpdater();
             const allEmployees = await EmployeeController.getAllEmployeesForAutoUpdater();
 
+            console.log(allEmployees);
+
             for (const vacation of allVacations) {
                 // Your logic to check if the vacation is ongoing
                 const today = new Date();
@@ -21,14 +23,25 @@ class AutoUpdater {
                     const relatedEmployee = allEmployees.find((employee) => employee.employee_id === employeeId);
 
                     if (relatedEmployee && relatedEmployee.status !== 2) {
+                        console.log("relatedEmployee status: " + relatedEmployee.status);
                         // Update the employee status to 'on vacation'
                         await EmployeeController.updateEmployeeStatusAsync(employeeId, 2);
                         console.log(`Updated status for employee ${employeeId} to 'on vacation'`);
                     }
+                } else if(today > endDate || today < startDate) {
+                    // Vacation has ended, update employee status
+                    const employeeId = vacation.employee_id;
+                    const relatedEmployee = allEmployees.find((employee) => employee.employee_id === employeeId);
+
+                    if (relatedEmployee && relatedEmployee.status !== 1) {
+                        // Update the employee status to 'active'
+                        await EmployeeController.updateEmployeeStatusAsync(employeeId, 1);
+                        console.log(`Updated status for employee ${employeeId} to 'active'`);
+                    }
                 }
             }
 
-            console.log('Vacation status updated successfully');
+            //console.log('Vacation status updated successfully');
         } catch (error) {
             console.error('Failed to update vacation status:', error);
         }
