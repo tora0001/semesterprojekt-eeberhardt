@@ -199,17 +199,14 @@ function createEmployee() {
 function editEmployeeClicked(employee) {
    console.log(employee);
    const update = document.querySelector("#updateEmployeeForm");
-   const employeeRole = employee.role_name;
-   console.log(employeeRole);
 
    update.employeeNameUpdate.value = employee.name;
-   update.employeeRoleUpdate.value = employeeRole;
-   //    update.vacationsDaysUpdate.value = employee.vacationDays;
-   //    console.log(employee.role_id);
+   update.employeeRoleUpdate.value = employee.role_name;
 }
 
 function editEmployee(employeeId) {
    const foundEmployee = employees.find((employee) => employee.employee_id === employeeId);
+   console.log(foundEmployee);
    const updateForm = /*HTML*/ `
     <form id="updateEmployeeForm">
       <label for="employeeName">Navn:</label>
@@ -232,6 +229,8 @@ function editEmployee(employeeId) {
     </form>`;
 
    mainContent.innerHTML = updateForm;
+
+   editEmployeeClicked(foundEmployee);
 
    const confirmBtn = document.getElementById("confirmBtn");
    const cancelBtn = document.getElementById("cancelBtn");
@@ -387,9 +386,81 @@ function saveVacation() {
       });
 }
 
-function editVacation() {}
+function editVacationClicked(vacation) {
+   console.log(vacation);
+   const update = document.querySelector("#updateVacationForm");
+   console.log(vacation.startDate);
 
-function performEditVacation() {}
+   update.updateStartDate.value = formatDate(vacation.startDate);
+   update.updateEndDate.value = formatDate(vacation.endDate);
+}
+
+function editVacation(vacationId) {
+   console.log(vacations);
+   const foundVacation = vacations.find((vacation) => vacation.vacation_id === vacationId);
+   console.log(foundVacation);
+   const updateVacationForm = /*HTML*/ `
+    <form id="updateVacationForm">
+      <label for="employeeName">Employee:</label>
+      <input type="text" id="employeeName" value="${foundVacation.name}" readonly>
+
+      <label for="startDate">Start Date:</label>
+      <input type="date" id="updateStartDate" name="startDate" required>
+
+      <label for="endDate">End Date:</label>
+      <input type="date" id="updateEndDate" name="endDate" required>
+
+      <div class="buttons">
+        <button type="button" id="confirmBtn">Gem</button>
+        <button type="button" id="cancelBtn">Annuller</button>
+      </div>
+    </form>`;
+
+   mainContent.innerHTML = updateVacationForm;
+
+   editVacationClicked(foundVacation);
+
+   const confirmBtn = document.getElementById("confirmBtn");
+   const cancelBtn = document.getElementById("cancelBtn");
+
+   confirmBtn.onclick = function () {
+      console.log("confirmBtn clicked");
+      performEditVacation(vacationId, foundVacation);
+      refreshVacationList();
+   };
+
+   cancelBtn.onclick = function () {
+      console.log("cancelBtn clicked");
+      refreshVacationList();
+   };
+}
+
+function performEditVacation(vacationId, vacation) {
+   const employeeId = vacation.employee_id;
+   const startDate = document.getElementById("updateStartDate").value;
+   const endDate = document.getElementById("updateEndDate").value;
+
+   const vacationData = {
+      employee_id: employeeId,
+      startDate: startDate,
+      endDate: endDate,
+   };
+
+   const url = `${endpoint}/vacation/${vacationId}`;
+   const method = "PUT";
+
+   fetch(url, {
+      method: method,
+      headers: {
+         "Content-Type": "application/json",
+      },
+      body: JSON.stringify(vacationData),
+   })
+      .then((response) => response.json())
+      .then(() => {
+         refreshVacationList();
+      });
+}
 
 function deleteVacation(vacationId) {
    const confirmationModalHTML = /*HTML*/ `
