@@ -110,6 +110,37 @@ class VacationController {
             throw error;
         }
     }
+
+    async getUsedVacationDaysForEmployee(employeeId) {
+        return new Promise((resolve, reject) => {
+            const query = 'SELECT SUM(DATEDIFF(endDate, startDate)) AS usedVacationDays FROM vacation WHERE employee_id=?;';
+            const values = [employeeId];
+
+            connection.query(query, values, (error, results) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    const usedVacationDays = results[0].usedVacationDays;
+                    resolve(usedVacationDays);
+                }
+            });
+        });
+    }
+
+    async deleteVacationAsync(vacationId) {
+        return new Promise((resolve, reject) => {
+            const query = 'DELETE FROM vacation WHERE vacation_id=?;';
+            const values = [vacationId];
+
+            connection.query(query, values, (error, results) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve();
+                }
+            });
+        });
+    }
 }
 
 export default new VacationController();
