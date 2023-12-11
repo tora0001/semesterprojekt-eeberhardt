@@ -365,7 +365,7 @@ function addNewVacation() {
       });
 }
 
-// function saveVacation() {
+ function saveVacation() {
    const employeeId = document.getElementById("employeeSelect").value;
    const startDate = document.getElementById("startDate").value;
    const endDate = document.getElementById("endDate").value;
@@ -390,6 +390,7 @@ function addNewVacation() {
       .then(() => {
          refreshVacationList();
       });
+   }
 
 
 function editVacationClicked(vacation) {
@@ -401,7 +402,7 @@ function editVacationClicked(vacation) {
    update.updateEndDate.value = formatDate(vacation.endDate);
 }
 
-// function editVacation(vacationId) {
+ function editVacation(vacationId) {
    console.log(vacations);
    const foundVacation = vacations.find((vacation) => vacation.vacation_id === vacationId);
    console.log(foundVacation);
@@ -439,6 +440,7 @@ function editVacationClicked(vacation) {
       console.log("cancelBtn clicked");
       refreshVacationList();
    };
+}
 
 
 function performEditVacation(vacationId, vacation) {
