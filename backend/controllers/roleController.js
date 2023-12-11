@@ -1,5 +1,5 @@
 // roleController.js
-import { connection } from '../database.js';
+import { connection } from '../util/database.js';
 
 class RoleController {
     // get all roles, /roles

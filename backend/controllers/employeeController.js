@@ -1,5 +1,5 @@
 // employeeController.js
-import { connection } from '../database.js';
+import { connection } from '../util/database.js';
 
 class EmployeeController {
   // get all employees, /employee
@@ -89,7 +89,48 @@ class EmployeeController {
     });
   }
 
-  // Other CRUD functions for employees
+  async getAllEmployeesAsync() {
+    return new Promise((resolve, reject) => {
+        const query = 'SELECT * FROM employee';
+
+        connection.query(query, (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+  }
+
+  // ... rest of the functions
+
+  // New function to get all employees for AutoUpdater
+  async getAllEmployeesForAutoUpdater() {
+    try {
+        const allEmployees = await this.getAllEmployeesAsync();
+        return allEmployees;
+    } catch (error) {
+        throw error;
+    }
+  }
+
+  async updateEmployeeStatusAsync(employeeId, newStatus) {
+    return new Promise((resolve, reject) => {
+        const query = 'UPDATE employee SET status_id =  WHERE employee_id = ?';
+        const values = [newStatus, employeeId];
+
+        connection.query(query, values, (error, results) => {
+            if (error) {
+                console.error(error);
+                reject(error);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
+
 }
 
 export default new EmployeeController();

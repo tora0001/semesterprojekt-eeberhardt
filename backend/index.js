@@ -7,6 +7,7 @@ import fs from 'fs';
 import employeeRoutes from './routes/employeeRoutes.js';
 import vacationRoutes from './routes/vacationRoutes.js';
 import roleRoutes from './routes/roleRoutes.js';
+import './util/autoUpdater.js';
 
 const app = express();
 app.use(express.json());

@@ -1,5 +1,5 @@
 //vacationController.js
-import { connection } from '../database.js';
+import { connection } from '../util/database.js';
 
 class VacationController {
     // get all vacations, /vacation
@@ -86,6 +86,29 @@ class VacationController {
             res.json(results);
           }
         });
+    }
+
+    async getAllVacationsAsync() {
+        return new Promise((resolve, reject) => {
+            const query = 'SELECT * FROM vacation';
+
+            connection.query(query, (error, results) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    }
+
+    async getAllVacationsForAutoUpdater() {
+        try {
+            const allVacations = await this.getAllVacationsAsync();
+            return allVacations;
+        } catch (error) {
+            throw error;
+        }
     }
 }
 
