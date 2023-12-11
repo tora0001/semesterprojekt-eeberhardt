@@ -22,7 +22,7 @@ function populateVacationTable(vacationData) {
                      <td>${formatDate(vacation.startDate)}</td>
                      <td>${formatDate(vacation.endDate)}</td>
                      <td>
-                       <button onclick="editVacationById(${vacation.vacation_id})">Rediger</button>
+                       <button onclick="editVacation(${vacation.vacation_id})">Rediger</button>
                        <button onclick="deleteVacation(${vacation.vacation_id})">Slet</button>
                      </td>
                  </tr>`
@@ -68,7 +68,7 @@ function populateVacationTable(vacationData) {
        
        <div class="buttons">
          <button type="button" onclick="saveVacation('create')">Save</button>
-         <button type="button" onclick="cancelForm()">Cancel</button>
+         <button type="button" onclick="refreshVacationList()">Cancel</button>
        </div>
      </form>`;
  
@@ -130,60 +130,60 @@ function populateVacationTable(vacationData) {
          });
  }
  
-//  function saveVacation() {
-//    const employeeSelect = document.getElementById("employeeSelect");
-//    const employeeId = employeeSelect.options[employeeSelect.selectedIndex].value;
-//    const startDate = document.getElementById("startDate").value;
-//    const endDate = document.getElementById("endDate").value;
- 
-//    const vacationData = {
-//      employee_id: employeeId,
-//      startDate: startDate,
-//      endDate: endDate,
-//    };
- 
-//    const url = `${endpoint}/vacation`;
-//    const method = "POST";
- 
-//    fetch(url, {
-//      method: method,
-//      headers: {
-//        "Content-Type": "application/json",
-//      },
-//      body: JSON.stringify(vacationData),
-//    })
-//      .then((response) => response.json())
-//      .then(() => {
-//        refreshVacationList();
-//      });
-//  }
-
  function saveVacation() {
-  const employeeId = document.getElementById("employeeSelect").value;
-  const startDate = document.getElementById("startDate").value;
-  const endDate = document.getElementById("endDate").value;
-
-  const vacationData = {
+   const employeeSelect = document.getElementById("employeeSelect");
+   const employeeId = employeeSelect.options[employeeSelect.selectedIndex].value;
+   const startDate = document.getElementById("startDate").value;
+   const endDate = document.getElementById("endDate").value;
+ 
+   const vacationData = {
      employee_id: employeeId,
      startDate: startDate,
      endDate: endDate,
-  };
-
-  const url = `${endpoint}/vacation`;
-  const method = "POST";
-
-  fetch(url, {
+   };
+ 
+   const url = `${endpoint}/vacation`;
+   const method = "POST";
+ 
+   fetch(url, {
      method: method,
      headers: {
-        "Content-Type": "application/json",
+       "Content-Type": "application/json",
      },
      body: JSON.stringify(vacationData),
-  })
+   })
      .then((response) => response.json())
      .then(() => {
-        refreshVacationList();
+       refreshVacationList();
      });
-  }
+ }
+
+//  function saveVacation() {
+//   const employeeId = document.getElementById("employeeSelect").value;
+//   const startDate = document.getElementById("startDate").value;
+//   const endDate = document.getElementById("endDate").value;
+
+//   const vacationData = {
+//      employee_id: employeeId,
+//      startDate: startDate,
+//      endDate: endDate,
+//   };
+
+//   const url = `${endpoint}/vacation`;
+//   const method = "POST";
+
+//   fetch(url, {
+//      method: method,
+//      headers: {
+//         "Content-Type": "application/json",
+//      },
+//      body: JSON.stringify(vacationData),
+//   })
+//      .then((response) => response.json())
+//      .then(() => {
+//         refreshVacationList();
+//      });
+//   }
  
  function deleteVacation(vacationId) {
   const confirmationModalHTML = /*HTML*/ `
@@ -231,35 +231,35 @@ function editVacationClicked(vacation) {
 }
 
  
- function editVacationById(vacationId) {
-   fetch(`${endpoint}/vacation/${vacationId}`)
-     .then((response) => response.json())
-     .then((vacationData) => {
-       const formHTML = /*HTML*/ `
-       <form id="vacationForm">
-       <div>
-         <label for="employeeSelect">Employee: ${vacationData[0].name}</label>
-       </div>
-       <br>
-       <div>
-         <label for="startDate">Start Date:</label>
-         <input type="date" id="startDate" name="startDate" value="${formatDate(vacationData[0].startDate)}" required>
-       </div>
-       <br>
-       <div>
-         <label for="endDate">End Date:</label>
-         <input type="date" id="endDate" name="endDate" value="${formatDate(vacationData[0].endDate)}" required>
-       </div>
-       <br>
-       <div class="buttons">
-         <button type="button" onclick="saveVacation(${vacationId}, 'edit')">Save</button>
-         <button type="button" onclick="refreshVacationList()">Cancel</button>
-       </div>
-     </form>
-     `;
-       mainContent.innerHTML = formHTML;
-     });
- }
+//  function editVacationById(vacationId) {
+//    fetch(`${endpoint}/vacation/${vacationId}`)
+//      .then((response) => response.json())
+//      .then((vacationData) => {
+//        const formHTML = /*HTML*/ `
+//        <form id="vacationForm">
+//        <div>
+//          <label for="employeeSelect">Employee: ${vacationData[0].name}</label>
+//        </div>
+//        <br>
+//        <div>
+//          <label for="startDate">Start Date:</label>
+//          <input type="date" id="startDate" name="startDate" value="${formatDate(vacationData[0].startDate)}" required>
+//        </div>
+//        <br>
+//        <div>
+//          <label for="endDate">End Date:</label>
+//          <input type="date" id="endDate" name="endDate" value="${formatDate(vacationData[0].endDate)}" required>
+//        </div>
+//        <br>
+//        <div class="buttons">
+//          <button type="button" onclick="saveVacation(${vacationId}, 'edit')">Save</button>
+//          <button type="button" onclick="refreshVacationList()">Cancel</button>
+//        </div>
+//      </form>
+//      `;
+//        mainContent.innerHTML = formHTML;
+//      });
+//  }
 
  function editVacation(vacationId) {
   console.log(vacations);
