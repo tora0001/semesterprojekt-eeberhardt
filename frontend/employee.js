@@ -163,7 +163,6 @@ function populateEmployeeTable(employeeData) {
  }
  
  function performEditEmployee(employeeId) {
- 
     const employeeName = document.getElementById("employeeNameUpdate").value;
     const employeeRole = document.getElementById("employeeRoleUpdate").value;
     const vacationDays = document.getElementById("vacationDaysUpdate").value;
@@ -240,6 +239,14 @@ function populateEmployeeTable(employeeData) {
           refreshEmployeeList();
        });
  }
+
+ function editEmployeeClicked(employee) {
+   console.log(employee);
+   const update = document.querySelector("#updateEmployeeForm");
+
+   update.employeeNameUpdate.value = employee.name;
+   update.employeeRoleUpdate.value = employee.role_name;
+}
  
  // Include other employee-related functions as needed
  
