@@ -196,11 +196,13 @@ function saveEmployee() {
 function editEmployeeClicked(employee) {
    console.log(employee);
    const update = document.querySelector("#updateEmployeeForm");
+   const employeeRole = employee.role_name;
+   console.log(employeeRole);
 
    update.employeeNameUpdate.value = employee.name;
-   update.employeeRoleUpdate.value = employee.role_name;
+   update.employeeRoleUpdate.value = employeeRole;
    //    update.vacationsDaysUpdate.value = employee.vacationDays;
-   console.log(employee.role_name);
+   //    console.log(employee.role_id);
 }
 
 function editEmployee(employeeId) {
@@ -209,20 +211,20 @@ function editEmployee(employeeId) {
    const updateForm = /*HTML*/ `
     <form id="updateEmployeeForm">
       <label for="employeeName">Navn:</label>
-      <input type="text" id="employeeNameUpdate" name="employeeName" required value="${foundEmployee.name}">
+      <input type="text" id="employeeNameUpdate" name="employeeName" required>
 
       <label for="employeeRole">Stilling:</label>
       <select type="text" id="employeeRoleUpdate" name="employeeRole" required>
-        <option value = "Manager">Manager</option>
-        <option value = "Employee">Medarbejder</option>
-        <option value = "Intern">Praktikant</option>
+        <option value = "1">Manager</option>
+        <option value = "2">Medarbejder</option>
+        <option value = "3">Praktikant</option>
       </select>
 
       <label for="vacationDays">Feriedage Til Rådighed:</label>
       <input type="text" id="vacationDaysUpdate" name="vacationDays" required>
 
       <div class="buttons">
-        <button type="button" id="confirmBtn">Opret</button>
+        <button type="button" id="confirmBtn">Gem</button>
         <button type="button" id="cancelBtn">Annuller</button>
       </div>
     </form>`;
