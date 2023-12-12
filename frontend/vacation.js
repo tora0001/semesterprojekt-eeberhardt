@@ -77,15 +77,14 @@ function populateVacationTable(vacationData) {
           
   const confirmBtn = document.getElementById("confirmBtn");
 
-        confirmBtn.onclick = function () {
-    console.log("confirmBtn clicked");
-    if (validateNewDates()) {
-      saveVacation('create');
-    } else {
-      alert("End date must be later than start date");
+confirmBtn.onclick = function () {
+  console.log("confirmBtn clicked");
+  if (validateDates("startDate", "endDate")) {
+    saveVacation('create');
+  } else {
+    alert("End date must be later than start date");
   }
-}
-
+};
        });
  }
  
@@ -302,15 +301,16 @@ function editVacationClicked(vacation) {
   const confirmBtn = document.getElementById("confirmBtn");
   const cancelBtn = document.getElementById("cancelBtn");
 
-        confirmBtn.onclick = function () {
-    console.log("confirmBtn clicked");
-    if (validateUpdateDates()) {
-      performEditVacation(vacationId, foundVacation);
-      refreshVacationList();
-    } else {
-      alert("End date must be later than start date");
+confirmBtn.onclick = function () {
+  console.log("confirmBtn clicked");
+  if (validateDates("updateStartDate", "updateEndDate")) {
+    performEditVacation(vacationId, foundVacation);
+    refreshVacationList();
+  } else {
+    alert("End date must be later than start date");
   }
-}
+};
+
 
   cancelBtn.onclick = function () {
     console.log("cancelBtn clicked");
@@ -345,15 +345,9 @@ function performEditVacation(vacationId, vacation) {
      });
 }
  
-function validateUpdateDates() {
-  const startDate = new Date(document.getElementById("updateStartDate").value);
-  const endDate = new Date(document.getElementById("updateEndDate").value);
-
-  return startDate < endDate;
-}
-function validateNewDates() {
-  const startDate = new Date(document.getElementById("startDate").value);
-  const endDate = new Date(document.getElementById("endDate").value);
+function validateDates(startDateId, endDateId) {
+  const startDate = new Date(document.getElementById(startDateId).value);
+  const endDate = new Date(document.getElementById(endDateId).value);
 
   return startDate < endDate;
 }
