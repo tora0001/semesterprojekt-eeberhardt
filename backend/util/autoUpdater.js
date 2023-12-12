@@ -106,6 +106,7 @@ class AutoUpdater {
 }
 
 // Start the cron job when the module is imported
+//AutoUpdater.startCronJob();
 AutoUpdater.startCronJobDaily();
 AutoUpdater.startCronJobMonthly();
 
