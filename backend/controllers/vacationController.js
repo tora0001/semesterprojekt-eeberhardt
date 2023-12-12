@@ -90,7 +90,24 @@ class VacationController {
 
     async getAllVacationsAsync() {
         return new Promise((resolve, reject) => {
-            const query = 'SELECT * FROM vacation';
+                const query = `
+                WITH RankedVacations AS (
+                    SELECT
+                        vacation_id,
+                        employee_id,
+                        startDate,
+                        endDate,
+                        ROW_NUMBER() OVER (PARTITION BY employee_id ORDER BY startDate) AS rnk
+                    FROM vacation
+                )
+                SELECT
+                    vacation_id,
+                    employee_id,
+                    startDate,
+                    endDate
+                FROM RankedVacations
+                WHERE rnk = 1;
+            `;
 
             connection.query(query, (error, results) => {
                 if (error) {

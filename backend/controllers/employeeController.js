@@ -131,6 +131,21 @@ class EmployeeController {
     });
 }
 
+updateVacationDaysAsync(employeeId, newVacationDays) {
+  return new Promise((resolve, reject) => {
+      const query = 'UPDATE employee SET vacation_days = ? WHERE employee_id = ?';
+      const values = [newVacationDays, employeeId];
+
+      connection.query(query, values, (error, results) => {
+          if (error) {
+              reject(error);
+          } else {
+              resolve();
+          }
+      });
+  });
+}
+
 }
 
 export default new EmployeeController();

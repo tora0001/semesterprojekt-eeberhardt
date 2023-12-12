@@ -9,8 +9,6 @@ class AutoUpdater {
             const allVacations = await VacationController.getAllVacationsForAutoUpdater();
             const allEmployees = await EmployeeController.getAllEmployeesForAutoUpdater();
 
-            console.log(allEmployees);
-
             for (const vacation of allVacations) {
                 // Your logic to check if the vacation is ongoing
                 const today = new Date();
@@ -47,25 +45,6 @@ class AutoUpdater {
         }
     }
 
-    static async updateVacationDaysForEmployees() {
-        try {
-            const allEmployees = await EmployeeController.getAllEmployeesForAutoUpdater();
-
-            for (const employee of allEmployees) {
-                const employeeId = employee.employee_id;
-                const usedVacationDays = await VacationController.getUsedVacationDaysForEmployee(employeeId);
-
-                // Update the employee's vacation days
-                await EmployeeController.updateVacationDaysAsync(employeeId, usedVacationDays);
-                console.log(`Updated vacation days for employee ${employeeId} to ${usedVacationDays}`);
-            }
-
-            //console.log('Vacation days updated successfully');
-        } catch (error) {
-            console.error('Failed to update vacation days:', error);
-        }
-    }
-
     static async deleteExpiredVacations() {
         try {
             const allVacations = await VacationController.getAllVacationsForAutoUpdater();
@@ -81,32 +60,53 @@ class AutoUpdater {
                 }
             }
 
-            //console.log('Expired vacations deleted successfully');
+            console.log('Expired vacations deleted successfully');
         } catch (error) {
             console.error('Failed to delete expired vacations:', error);
         }
     }
 
-    static startCronJob() {
-        // Schedule auto-update every 10 seconds
-        cron.schedule('*/10 * * * * *', () => {
-            this.deleteExpiredVacations
+    static async addEmployeeVacationDays() {
+        try {
+            const allEmployees = await EmployeeController.getAllEmployeesForAutoUpdater();
+            console.log(allEmployees);
+
+            for (const employee of allEmployees) {
+                const employeeId = employee.employee_id;
+                const vacationDays = employee.vacation_days + 2.0833333333;
+                console.log(employeeId + vacationDays);
+
+
+                // Update the employee's vacation days with 2.0833333333
+                await EmployeeController.updateVacationDaysAsync(employeeId, vacationDays);
+                console.log(`Updated vacation days for employee ${employeeId} to ${vacationDays}`);
+            }
+
+            console.log('Vacation days updated successfully');
+        } catch (error) {
+            console.error('Failed to update vacation days:', error);
+        }
+    }
+        
+
+    static startCronJobDaily() {
+        // 0 4 * * *   # Minute: 0, Hour: 4, Every day, Every month, Any day of the week
+        cron.schedule('0 4 * * *', () => {
+            this.deleteExpiredVacations();
             this.updateVacationStatus();
-            this.updateEmployeeStatus();
         });
     }
 
     static startCronJobMonthly() {
-    // Schedule auto-update on the 1st day of every month at midnight (00:00:00)
-    cron.schedule('0 0 1 * *', () => {
-        this.updateVacationStatus();
-        this.updateEmployeeStatus();
-    });
-}
+        // 0 4 1 * *   # Minute: 0, Hour: 4, Day of month: 1, Every month, Any day of the week
+        cron.schedule('0 4 1 * *', () => {
+            this.addEmployeeVacationDays();
+        });
+    }
 }
 
 // Start the cron job when the module is imported
-AutoUpdater.startCronJob();
+AutoUpdater.startCronJobDaily();
 AutoUpdater.startCronJobMonthly();
 
 export default AutoUpdater;
