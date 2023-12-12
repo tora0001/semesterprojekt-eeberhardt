@@ -67,12 +67,25 @@ function populateVacationTable(vacationData) {
        </div>
        
        <div class="buttons">
-         <button type="button" onclick="saveVacation('create')">Save</button>
+         <button type="button" id="confirmBtn">Save</button>
          <button type="button" onclick="refreshVacationList()">Cancel</button>
        </div>
      </form>`;
  
           mainContent.innerHTML = formHTML;
+
+          
+  const confirmBtn = document.getElementById("confirmBtn");
+
+        confirmBtn.onclick = function () {
+    console.log("confirmBtn clicked");
+    if (validateNewDates()) {
+      saveVacation('create');
+    } else {
+      alert("End date must be later than start date");
+  }
+}
+
        });
  }
  
@@ -289,11 +302,16 @@ function editVacationClicked(vacation) {
   const confirmBtn = document.getElementById("confirmBtn");
   const cancelBtn = document.getElementById("cancelBtn");
 
-  confirmBtn.onclick = function () {
-     console.log("confirmBtn clicked");
-     performEditVacation(vacationId, foundVacation);
-     refreshVacationList();
-  };
+        confirmBtn.onclick = function () {
+    console.log("confirmBtn clicked");
+    if (validateUpdateDates()) {
+      performEditVacation(vacationId, foundVacation);
+      refreshVacationList();
+    } else {
+      alert("End date must be later than start date");
+  }
+}
+
   cancelBtn.onclick = function () {
     console.log("cancelBtn clicked");
     refreshVacationList();
@@ -327,3 +345,15 @@ function performEditVacation(vacationId, vacation) {
      });
 }
  
+function validateUpdateDates() {
+  const startDate = new Date(document.getElementById("updateStartDate").value);
+  const endDate = new Date(document.getElementById("updateEndDate").value);
+
+  return startDate < endDate;
+}
+function validateNewDates() {
+  const startDate = new Date(document.getElementById("startDate").value);
+  const endDate = new Date(document.getElementById("endDate").value);
+
+  return startDate < endDate;
+}
