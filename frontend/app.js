@@ -14,8 +14,6 @@ const endpoint = "https://semesterprojekt-eeberhardt.azurewebsites.net";
 window.addEventListener("load", start);
 
 function start() {
-  console.log("Running");
-
   // Fetch roles and update the roleList
   refreshRoleList();
 

@@ -227,7 +227,6 @@ function performDeleteEmployee(employeeId) {
 }
 
 function editEmployeeClicked(employee) {
-  console.log(employee);
   const update = document.querySelector("#updateEmployeeForm");
 
   update.employeeNameUpdate.value = employee.name;
