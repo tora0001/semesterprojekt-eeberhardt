@@ -103,8 +103,6 @@ class EmployeeController {
     });
   }
 
-  // ... rest of the functions
-
   // New function to get all employees for AutoUpdater
   async getAllEmployeesForAutoUpdater() {
     try {
