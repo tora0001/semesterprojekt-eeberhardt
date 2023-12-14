@@ -6,10 +6,10 @@ function populateEmployeeTable(employeeData) {
      <table id="employeeTable">
        <thead>
          <tr>
-           <th id="employeeTableName" onclick="sortTableByName()">Navn</th>
-           <th id="employeeTableRole" onclick="sortTableByRole()">Stilling</th>
-           <th id="employeeTableStatus" onclick="sortTableByStatus()">Status</th>
-           <th id="employeeTableVacationDays">Feriedage</th>
+           <th class="tableHeader" id="employeeTableName" onclick="sortTableByName()">Navn</th>
+           <th class="tableHeader" id="employeeTableRole" onclick="sortTableByRole()">Stilling</th>
+           <th class="tableHeader" id="employeeTableStatus" onclick="sortTableByStatus()">Status</th>
+           <th class="tableHeader" id="employeeTableVacationDays">Feriedage</th>
            <th>Handlinger</th>
          </tr>
        </thead>

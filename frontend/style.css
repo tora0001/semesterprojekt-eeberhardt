@@ -65,15 +65,7 @@ th {
   background-color: #f2f2f2;
 }
 
-#employeeTableName {
-  cursor: pointer;
-}
-
-#employeeTableRole {
-  cursor: pointer;
-}
-
-#employeeTableStatus {
+.tableHeader {
   cursor: pointer;
 }
 

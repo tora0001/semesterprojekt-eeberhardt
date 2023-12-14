@@ -6,9 +6,9 @@ function populateVacationTable(vacationData) {
      <table id="vacationTable">
        <thead>
          <tr>
-           <th>Medarbejder</th>
-           <th>Start Dato</th>
-           <th>Slut Dato</th>
+           <th class="tableHeader" id="vacationNameTable" onclick="sortVacationByName()">Medarbejder</th>
+           <th class="tableHeader" id="startDateTable" onclick="sortVacationByStartDate()">Start Dato</th>
+           <th class="tableHeader" id="endDateTable" onclick="sortVacationByEndDate()">Slut Dato</th>
            <th>Handlinger</th>
          </tr>
        </thead>
@@ -33,6 +33,42 @@ function populateVacationTable(vacationData) {
      <div class="buttons">
        <button onclick="addNewVacation()">Opret Ny Ferie</button>
      </div>`;
+
+  const vacationStartTableNameHeader = document.getElementById("startDateTable");
+  vacationStartTableNameHeader.dataset.vacationData = JSON.stringify(vacationData);
+
+  const vacationEndTableNameHeader = document.getElementById("endDateTable");
+  vacationEndTableNameHeader.dataset.vacationData = JSON.stringify(vacationData);
+
+  const vacationNameHeader = document.getElementById("vacationNameTable");
+  vacationNameHeader.dataset.vacationData = JSON.stringify(vacationData);
+}
+
+function sortVacationByName() {
+  const vacationDataString = document.getElementById("vacationNameTable").dataset.vacationData;
+  const vacationData = JSON.parse(vacationDataString);
+
+  vacationData.sort((a, b) => a.name.localeCompare(b.name));
+
+  populateVacationTable(vacationData);
+}
+
+function sortVacationByStartDate() {
+  const vacationDataString = document.getElementById("startDateTable").dataset.vacationData;
+  const vacationData = JSON.parse(vacationDataString);
+
+  vacationData.sort((a, b) => a.startDate.localeCompare(b.startDate));
+
+  populateVacationTable(vacationData);
+}
+
+function sortVacationByEndDate() {
+  const vacationDataString = document.getElementById("endDateTable").dataset.vacationData;
+  const vacationData = JSON.parse(vacationDataString);
+
+  vacationData.sort((a, b) => a.endDate.localeCompare(b.endDate));
+
+  populateVacationTable(vacationData);
 }
 
 function addNewVacation() {
