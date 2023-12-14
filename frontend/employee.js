@@ -9,7 +9,7 @@ function populateEmployeeTable(employeeData) {
            <th id="employeeTableName" onclick="sortTableByName()">Navn</th>
            <th id="employeeTableRole" onclick="sortTableByRole()">Stilling</th>
            <th id="employeeTableStatus" onclick="sortTableByStatus()">Status</th>
-           <th id="employeeTableVacationDays">Feriedage til rådighed</th>
+           <th id="employeeTableVacationDays">Feriedage</th>
            <th>Handlinger</th>
          </tr>
        </thead>
@@ -76,7 +76,7 @@ function addNewEmployee() {
   const formHTML = /*HTML*/ `
      <form id="employeeForm">
        <label for="employeeName">Navn:</label>
-       <input type="text" id="employeeName" name="employeeName" required>
+       <input type="text" id="employeeName" name="employeeName" required maxlength="50">
  
        <label for="employeeRole">Stilling:</label>
        <select type="text" id="employeeRole" name="employeeRole" required>
