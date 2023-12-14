@@ -87,7 +87,7 @@ function addNewEmployee() {
        <input type="text" id="vacationDays" name="vacationDays" required>
  
        <div class="buttons">
-         <button type="button" onclick="createEmployee('create')">Opret</button>
+         <button type="submit" onclick="createEmployee('create')">Opret</button>
          <button type="button" onclick="refreshEmployeeList()">Annuller</button>
        </div>
      </form>`;
