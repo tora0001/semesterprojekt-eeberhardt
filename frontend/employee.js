@@ -74,7 +74,7 @@ function sortTableByStatus() {
 
 function addNewEmployee() {
   const formHTML = /*HTML*/ `
-     <form id="employeeForm">
+     <form id="employeeForm"  onsubmit="createEmployee(); return false;">
        <label for="employeeName">Navn:</label>
        <input type="text" id="employeeName" name="employeeName" required maxlength="50">
  
@@ -87,7 +87,7 @@ function addNewEmployee() {
        <input type="text" id="vacationDays" name="vacationDays" required>
  
        <div class="buttons">
-         <button type="submit" onclick="createEmployee('create')">Opret</button>
+         <button type="submit">Opret</button>
          <button type="button" onclick="refreshEmployeeList()">Annuller</button>
        </div>
      </form>`;
@@ -127,7 +127,7 @@ function createEmployee() {
 function editEmployee(employeeId) {
   const foundEmployee = employees.find((employee) => employee.employee_id === employeeId);
   const updateForm = /*HTML*/ `
-     <form id="updateEmployeeForm">
+     <form id="updateEmployeeForm" onsubmit="performEditEmployee(${employeeId}); return false;">
        <label for="employeeName">Navn:</label>
        <input type="text" id="employeeNameUpdate" name="employeeName" required value="${foundEmployee.name}">
  
@@ -140,26 +140,12 @@ function editEmployee(employeeId) {
        <input type="text" id="vacationDaysUpdate" name="vacationDays" required value="${foundEmployee.vacation_days}">
  
        <div class="buttons">
-         <button type="button" id="confirmBtn">Gem</button>
-         <button type="button" id="cancelBtn">Annuller</button>
+         <button type="submit">Gem</button>
+         <button type="button" onclick="refreshEmployeeList();">Annuller</button>
        </div>
      </form>`;
 
   mainContent.innerHTML = updateForm;
-
-  const confirmBtn = document.getElementById("confirmBtn");
-  const cancelBtn = document.getElementById("cancelBtn");
-
-  confirmBtn.onclick = function () {
-    console.log("confirmBtn clicked");
-    performEditEmployee(employeeId);
-    refreshEmployeeList();
-  };
-
-  cancelBtn.onclick = function () {
-    console.log("cancelBtn clicked");
-    refreshEmployeeList();
-  };
 }
 
 function performEditEmployee(employeeId) {
