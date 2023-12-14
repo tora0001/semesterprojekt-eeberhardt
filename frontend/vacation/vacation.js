@@ -86,25 +86,21 @@ function addNewVacation() {
       const formHTML = /*HTML*/ `
      <form id="vacationForm">
        <div>
-       <label for="employeeSelect">Employee:</label>
+       <label for="employeeSelect">Medarbejder:</label>
        <select id="employeeSelect" name="employeeSelect">
          ${employeeSelectOptions}
            </select>
-       </div>
-       <br>
-       <div>
-       <label for="startDate">Start Date:</label>
+       
+       <label for="startDate">Start Dato:</label>
        <input type="date" id="startDate" name="startDate" required>
-       </div>
-       <br>
-       <div>
-       <label for="endDate">End Date:</label>
+       
+       <label for="endDate">Slut Dato:</label>
        <input type="date" id="endDate" name="endDate" required>
        </div>
        
        <div class="buttons">
-         <button type="submit">Save</button>
-         <button type="button" onclick="refreshVacationList()">Cancel</button>
+         <button type="submit">Gem</button>
+         <button type="button" onclick="refreshVacationList()">Annuller</button>
        </div>
      </form>`;
 
@@ -216,13 +212,13 @@ function editVacation(vacationId) {
   const foundVacation = vacations.find((vacation) => vacation.vacation_id === vacationId);
   const updateVacationForm = /*HTML*/ `
    <form id="updateVacationForm">
-     <label for="employeeName">Employee:</label>
+     <label for="employeeName">Medarbejder:</label>
      <input type="text" id="employeeName" value="${foundVacation.name}" readonly>
 
-     <label for="startDate">Start Date:</label>
+     <label for="startDate">Start Dato:</label>
      <input type="date" id="updateStartDate" name="startDate" required>
 
-     <label for="endDate">End Date:</label>
+     <label for="endDate">Slut Dato:</label>
      <input type="date" id="updateEndDate" name="endDate" required>
 
      <div class="buttons">
